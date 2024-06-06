@@ -19,6 +19,12 @@ h2 {
     margin: 2% 0 2% 0;
 }
 
+h3{
+    font-family: time; 
+    left: 50; 
+    up: 50; 
+}
+
 .header {
     text-align: center;
 }
