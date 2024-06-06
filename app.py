@@ -19,7 +19,7 @@ def index():
 def matches():
     return render_template("matches.html")
 
-def doMatchmaking():
-    return null
+# def doMatchmaking():
+#     return null
 
 conn.close()
