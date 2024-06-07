@@ -1,30 +1,38 @@
-{% extends "layout.html" %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer Tutoring Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="logo.ico"/>
+</head>
 
-{% block title %}
-Home
-{% endblock %}
+<div class="header">
+    <nav>
+        <div class="logo">
+        <ul>
+            <li><a href="Login.html">Guidance Entry</a></li>
+        </ul>
+    </nav>
 
-{% block item %}
-<li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/matches">Guidance Entry</a>
-</li>
-{% endblock %}
+ 
 
-{% block header %}
-<h1>Welcome to Peer Tutoring Management System</h1>
-{% endblock %}
+<div class="content">
+    <h1 class="slide-left">Welcome</h1>
+    <p class="slide-left">"Education is the most powerful weapon which you can use to change the world." - Nelson Mandela. </p>
+    <div class="links slide-left">
+        <a href="student form.html" class="btn">Student Form</a>
+        <a href="Tutor form.html" class="btn">Tutor Form</a>
+    </div>
+</div>
+</div>
 
-{% block main %}
-<h3>"Education is the most powerful weapon which you can use to change the world." - Nelson Mandela. </h3>
-{% endblock %}
 
-{% block styles %}
 <style>
     body {
-        background-image: url('Tutoring.jpg');
+        width:100%;
+        background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('Tutoring.jpg');
+        background-position:center top;
         background-size: cover;
-        background-repeat: no-repeat;
         background-position: center;
     }
 </style>
-{% endblock %}
+
