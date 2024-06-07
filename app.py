@@ -23,7 +23,7 @@ def matches():
 def login():
     return render_template("login.html")
 
-    @app.route("/student_form")
+@app.route("/student_form")
 def student_form():
     return render_template("student_form.html")
 
