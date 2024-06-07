@@ -106,6 +106,14 @@ nav ul li:hover:after{
     line-height: 28px;
     opacity: 0;
 }
+.content P1{
+    font-size: medium;
+    position: absolute;
+    top: 63%;  
+    max-width: 500px;
+    line-height: 20px;
+    opacity: 0;
+}
 .links{
     margin-top: 200px;
     opacity: 0;
@@ -129,6 +137,9 @@ nav ul li:hover:after{
 }
 p.slide-left{
     animation-delay: 1s;
+}
+p1.slide-left.delay {
+    animation-delay: 3s; 
 }
 .links.slide-left{
     animation-delay: 2s;
