@@ -29,48 +29,56 @@ body {
     color: #fff;
 }
 
-nav{
+nav {
     display: flex;
-    text-align: center;
+    justify-content: space-between; 
+    align-items: center; 
     position: absolute;
-    padding: 18px;
-    left: 82.5%; 
-}
-nav .logo{
-    display: flex;
-    align-items: center;
-    font-size: 26px;
-    font-weight: 60;
-    color: #fff;
-}
-nav .logo img{
-    width: 100px;
-    position: absolute; 
-    margin-right: 10px;
-    top: 85%;
-    right: 640%; 
-    transform: translate(-50%, -50%);
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    padding: 0;
 }
 
-nav .logo h1{
-    text-align: left;
-    position: absolute;
+nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 125px;
+    margin-right: 10px;
+}
+
+nav .logo h1 {
+    color: #fff;
     font-size: 25px;
-    top: 25%; 
-    right: 595%; 
-    
+    margin: 0; 
 }
-nav ul li{
-    display: inline-block;
+
+nav ul {
+    font-size: x-large;
     list-style: none;
-    margin: 10px 20px;
+    margin: 0;
+    padding: 0;
 }
-nav ul li a{
+
+nav ul li {
+    display: inline-block; 
+    margin-left: 10px; 
+}
+
+nav ul li:first-child {
+    margin-left: auto; 
+}
+
+nav ul li a {
     text-decoration: none;
     color: #fff;
     font-weight: 500;
 }
-nav ul li::after{
+
+nav ul li::after {
     content: '';
     width: 0%;
     height: 2px;
@@ -78,10 +86,15 @@ nav ul li::after{
     display: block;
     margin: auto;
 }
-nav ul li:hover:after{
+
+nav ul li:hover::after {
     width: 100%;
-    transition: 0.5s;
+    transition: width 0.5s;
 }
+
+
+
+
 .content{
     margin-top: 12.5%;
     margin-left: 9%;
@@ -213,6 +226,7 @@ p1.slide-left.delay {
 }
 
 .signupq h1 {
+    color: #fff;
     font-size: 18px;
     margin-bottom: 10px;
 }
