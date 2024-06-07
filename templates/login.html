@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="static/styles.css">
+        <link rel="icon" type="image/x-icon" href="static/image/favicon.ico"/>
+    </head>
+<body>
+</body>
+</html>
+
+<div class="header">
+    <nav>
+        <div class="logo">
+            <a href="/">
+                <img src="static/image/logo.jpeg" alt="Logo" class="logo-img">
+            </a>
+        
+            <h1>Peer Tutoring Management System</h1>
+        <ul>
+            <li><a href="/login">Guidance Entry</a></li>
+        </ul>
+    </nav>
+    </div>
+    <div class="stuform">
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <label for="full-name">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="code">Code (6 digits)</label>
+                <input type="text" id="code" name="code" pattern="\d{6}" title="Please enter a 6-digit number" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Log in</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="signupq">
+        <h1>Don't have an account?</h1>
+        <a href="/signup">Create one</a>
+        <div class = forgot>
+        <a href="/forgot-password">Forgot Password?</a>
+    </div>
+    </div>
+    
+    <div class = "footer">
+        <P>© MicroByte Inc. 2024</P>
+    </div>
+</body>
+</html>
