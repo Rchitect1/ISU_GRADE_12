@@ -99,6 +99,7 @@ nav ul li:hover::after {
 .content{
     margin-top: 12.5%;
     margin-left: 9%;
+    margin-right: 9%;
     color: #fff;
 }
 .content h1{
