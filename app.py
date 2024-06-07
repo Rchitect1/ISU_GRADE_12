@@ -19,6 +19,10 @@ def index():
 def matches():
     return render_template("matches.html")
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
 # def doMatchmaking():
 #     return null
 
