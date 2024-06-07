@@ -27,6 +27,10 @@ def login():
 def student_form():
     return render_template("student_form.html")
 
+@app.route("/tutor_form")
+def tutor_form():
+    return render_template("tutor_form.html")
+
 # def doMatchmaking():
 #     return null
 
