@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up</title>
+        <link rel="stylesheet" href="static/styles.css">
+        <link rel="icon" type="image/x-icon" href="static/image/favicon.ico"/>
+    </head>
+<body>
+</body>
+</html>
+
+<div class="header">
+    <nav>
+        <div class="logo">
+            <a href="/">
+                <img src="static/image/logo.jpeg" alt="Logo" class="logo-img">
+            </a>
+            <h1>Peer Tutoringn Management System</h1>
+        </div>
+        <ul>
+            <li><a href="/login">Guidance Entry</a></li>
+        </ul>
+    </nav>
+</div>
+    <div class="stuform">
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="full_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Sign Up</button>
+            </div>
+        </div>
+            <div class="signupq">
+                <h1>Already Have an Account?</h1>
+                <a href="/login">Sign in</a>
+        </div>
+    <div class = "footer">
+        <P>© MicroByte Inc. 2024</P>
+    </div>
+</body>
+</html>
