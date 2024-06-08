@@ -35,6 +35,23 @@ def student_form():
 def tutor_form():
     return render_template("tutor_form.html")
 
+
+@app.route("/submit_login", methods=["POST"])
+def submit_login():
+    email = request.form["email"]
+    password = request.form["password"]
+    code = request.form["code"]
+
+    if code == "123456":
+        return redirect(url_for("matches"))
+    else:
+        return redirect(url_for("login", showModal='true', message="Invalid code"))
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
 # def doMatchmaking():
 #     return null
 
