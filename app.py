@@ -64,12 +64,6 @@ def submit_login():
     else:
         return redirect(url_for("login", showModal='true', message="Invalid code"))
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
 app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
     name = request.form["full-name"]
@@ -79,9 +73,29 @@ def submit_tutor_form():
     period = request.form["period"]
     course = request.form["subject"]
 
+    matchMacking([name, email, phone, grade, course, period], "Tutor")
+
+    return redirect(url_for("thank"))
+
+app.route("/submit_student_form", methods=["POST"])
+def submit_tutor_form():
+    name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    grade = request.form["grade"]
+    period = request.form["period"]
+    course = request.form["subject"]
+
+    matchMacking([name, email, phone, grade, course, period], "Student")
+
     return render_template("thank.html")
 
+def matchMacking(data, form):
+    data = 0
+    form = 0
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 # def doMatchmaking():
