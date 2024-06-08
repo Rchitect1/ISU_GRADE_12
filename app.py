@@ -73,7 +73,7 @@ def submit_tutor_form():
     period = request.form["period"]
     course = request.form["subject"]
 
-    matchMacking([name, email, phone, grade, course], "Tutor")
+    matchMacking([name, email, phone, grade, course, period], "Tutor")
 
     return redirect(url_for("thank"))
 
@@ -83,9 +83,10 @@ def submit_tutor_form():
     email = request.form["email"]
     phone = request.form["phone"]
     grade = request.form["grade"]
+    period = request.form["period"]
     course = request.form["subject"]
 
-    matchMacking([name, email, phone, grade, course], "Student")
+    matchMacking([name, email, phone, grade, course, period], "Student")
 
     return render_template("thank.html")
 
