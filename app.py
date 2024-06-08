@@ -76,9 +76,10 @@ def submit_tutor_form():
     email = request.form["email"]
     phone = request.form["phone"]
     grade = request.form["grade"]
+    period = request.form["period"]
     course = request.form["subject"]
 
-    return redirect(url_for("thank"))
+    return render_template("thank.html")
 
 
 
