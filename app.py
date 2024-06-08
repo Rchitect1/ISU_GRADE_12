@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 from flask_session import Session
 import sqlite3
+from bs4 import BeautifulSoup
 
 conn = sqlite3.connect("peer_tutor.db")
 c = conn.cursor
@@ -32,13 +33,6 @@ def student_form():
 
 @app.route("/tutor_form")
 def tutor_form():
-    return render_template("tutor_form.html")
-
-@app.route("/submit", methods=["POST"])
-def makeMatches():
-    full_name = request.args.get("full_name")
-    full_name = request.args.get("full_name")
-
     return render_template("tutor_form.html")
 
 # def doMatchmaking():
