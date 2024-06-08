@@ -29,7 +29,7 @@
 
     <div class="content">
         <h1 class="slide-left">Welcome</h1>
-        <p class="slide-left">"Education is the most powerful weapon which you can use to change the world."<br>- Nelson Mandela. </p>
+        <p id="quote" class="slide-left"></p>
         <div class="links slide-left">
             <a href="/student_form" class="btn">Student Form</a>
             <a href="/tutor_form" class="btn">Tutor Form</a>
@@ -40,6 +40,69 @@
     <div class = "footer">
         <P>© MicroByte Inc. 2024</P>
     </div>
+    <script>
+        // Array of quotes
+        const quotes = [
+            `"Education is the most powerful weapon which you can use to change the world."<br>- Nelson Mandela`,
+            `"The beautiful thing about learning is that no one can take it away from you." - B.B. King`,
+            `"Education is not the filling of a pail, but the lighting of a fire." - William Butler Yeats`,
+            `"Live as if you were to die tomorrow. Learn as if you were to live forever." - Mahatma Gandhi`,
+            `"The more that you read, the more things you will know. The more that you learn, the more places you'll go." - Dr. Seuss`,
+            `"Education is the key to unlock the golden door of freedom." - George Washington Carver`,
+            `"The mind is not a vessel to be filled, but a fire to be kindled." - Plutarch`,
+            `"An investment in knowledge pays the best interest." - Benjamin Franklin`,
+            `"Education is the passport to the future, for tomorrow belongs to those who prepare for it today." - Malcolm X`,
+            `"Learning is a treasure that will follow its owner everywhere." - Chinese Proverb`,
+            `"The purpose of education is to replace an empty mind with an open one." - Malcolm S. Forbes`,
+            `"Education is not preparation for life; education is life itself." - John Dewey`,
+            `"Education is the foundation upon which we build our future." - Christine Gregoire`,
+            `"The only thing that interferes with my learning is my education." - Albert Einstein`,
+            `"Education is the movement from darkness to light." - Allan Bloom`,
+            `"Knowledge is power. Information is liberating. Education is the premise of progress, in every society, in every family." - Kofi Annan`,
+            `"Education is not just about going to school and getting a degree. It's about widening your knowledge and absorbing the truth about life." - Shakuntala Devi`,
+            `"The more you learn, the more you earn." - Warren Buffett`,
+            `"Education breeds confidence. Confidence breeds hope. Hope breeds peace." - Confucius`,
+            `"The roots of education are bitter, but the fruit is sweet." - Aristotle`,
+            `"Education is not solely about earning a great living. It means living a great life." - Brad Henry`,
+            `"To educate a person in the mind but not in morals is to educate a menace to society." - Theodore Roosevelt`,
+            `"The function of education is to teach one to think intensively and to think critically. Intelligence plus character — that is the goal of true education." - Martin Luther King Jr.`,
+            `"Education is the most powerful weapon you can use to change the world for the better." - Marian Wright Edelman`,
+            `"Education is the foundation of all we do in life. It shapes who we are and what we aspire to be." - Julie Payette"`
+        ];
+
+    // Function to display a random quote
+    function displayRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        document.getElementById("quote").textContent = quotes[randomIndex];
+    }
+
+    // Get the current date
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; 
+
+    // Modify content based on specific dates
+    if ((month === 5 && day >= 1 && day <= 7)) {
+        document.querySelector(".logo h1").innerHTML += "🍎";
+    } else if ((month === 4 && day >= 14 && day <= 22)) {
+        document.querySelector(".logo h1").innerHTML += "🌎"; 
+    } else if ((month === 12 && day >= 25) || (month === 1 && day <= 7)) {
+        document.querySelector(".logo h1").innerHTML += "🎄"; 
+    } else if (month === 10 && day === 31) {
+        document.querySelector(".logo h1").innerHTML += "🎃"; 
+    } else if (month === 2 && day === 14) {
+        document.querySelector(".logo h1").innerHTML += "❤️";
+    } else if (month === 7 && day === 1) {
+        document.querySelector(".logo h1").innerHTML += "🍁"; 
+    } else if (month === 11 && day === 11) {
+        document.querySelector(".logo h1").innerHTML += "🌺"; 
+    } 
+
+    // Call the function when the page loads
+    window.onload = displayRandomQuote;
+
+    </script>
+
 </div>
 
 
