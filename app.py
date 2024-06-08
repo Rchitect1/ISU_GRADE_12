@@ -3,6 +3,11 @@ from flask_session import Session
 import sqlite3
 from bs4 import BeautifulSoup
 
+
+email = ""
+password = ""
+code = ""
+
 conn = sqlite3.connect("peer_tutor.db")
 c = conn.cursor
 
@@ -35,6 +40,18 @@ def student_form():
 def tutor_form():
     return render_template("tutor_form.html")
 
+@app.route("/thank")
+def thank():
+    return render_template("thank.html")
+
+
+@app.route("/signout")
+def signout():
+    email = ""
+    password = ""
+    code = ""
+    return render_template("index.html")
+
 
 @app.route("/submit_login", methods=["POST"])
 def submit_login():
@@ -50,6 +67,20 @@ def submit_login():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+app.route("/submit_tutor_form", methods=["POST"])
+def submit_tutor_form():
+    name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    grade = request.form["grade"]
+    course = request.form["subject"]
+
+    return redirect(url_for("thank"))
+
+
 
 
 # def doMatchmaking():
