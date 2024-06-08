@@ -94,7 +94,9 @@ nav ul li:hover::after {
     transition: width 0.5s;
 }
 
-
+p1 {
+    margin-top: 50px;
+}
 
 
 .content{
