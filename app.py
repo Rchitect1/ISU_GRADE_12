@@ -34,6 +34,13 @@ def student_form():
 def tutor_form():
     return render_template("tutor_form.html")
 
+@app.route("/submit", methods=["POST"])
+def makeMatches():
+    full_name = request.args.get("full_name")
+    full_name = request.args.get("full_name")
+
+    return render_template("tutor_form.html")
+
 # def doMatchmaking():
 #     return null
 
