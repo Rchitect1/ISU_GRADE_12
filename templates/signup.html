@@ -47,5 +47,26 @@
     <div class = "footer">
         <P>© MicroByte Inc. 2024</P>
     </div>
+    <script>
+        // Get the current date
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; 
+
+    // Modify content based on specific dates
+    if ((month === 5 && day >= 1 && day <= 7)) {
+        document.querySelector(".logo h1").innerHTML += " 🍎";
+    } else if ((month === 4 && day >= 14 && day <= 22)) {
+        document.querySelector(".logo h1").innerHTML += " 🌎"; 
+    } else if ((month === 12 && day >= 25) || (month === 1 && day <= 7)) {
+        document.querySelector(".logo h1").innerHTML += " 🎄"; 
+    } else if (month === 10 && day === 31) {
+        document.querySelector(".logo h1").innerHTML += " 🎃"; 
+    } else if (month === 2 && day === 14) {
+        document.querySelector(".logo h1").innerHTML += " ❤️";
+    } else if (month === 3 && day === 17) {
+        document.querySelector(".logo h1").innerHTML += " 🍀"; 
+    }
+    </script>
 </body>
 </html>
