@@ -21,13 +21,11 @@
     <div class="stuform">
         <form action="/submit_login" method="post">
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
+                <label for="code">School Code</label>
+                <input type="password" id="school-code" name="school-code" pattern=".{1,}" title="Please enter at least 1 character, including numbers, letters, and symbols" required>
+                
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+ 
             <div class="form-group">
                 <label for="code">Code (6 digits)</label>
                 <input type="password" id="code" name="code" pattern="\d{6}" title="Please enter a 6-digit number" required>

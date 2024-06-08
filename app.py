@@ -60,11 +60,11 @@ def signout():
 
 @app.route("/submit_login", methods=["POST"])
 def submit_login():
-    email = request.form["email"]
-    password = request.form["password"]
+
+    school_code = request.form["school-code"]
     code = request.form["code"]
 
-    if code == "123456":
+    if code == "123456" and school_code == "654321":
         return redirect(url_for("matches"))
     else:
         return redirect(url_for("login", showModal='true', message="Invalid code"))
