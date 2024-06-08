@@ -4,9 +4,6 @@ import sqlite3
 from bs4 import BeautifulSoup
 
 
-email = ""
-password = ""
-code = ""
 
 conn = sqlite3.connect("peer_tutor.db")
 c = conn.cursor
@@ -65,6 +62,9 @@ def submit_login():
     code = request.form["code"]
 
     if code == "123456" and school_code == "654321":
+
+        #nHsmarket1824-4202#ptsklcd
+        #891742
         return redirect(url_for("matches"))
     else:
         return redirect(url_for("login", showModal='true', message="Invalid code"))
