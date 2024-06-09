@@ -107,12 +107,19 @@ nav .close-btn {
     border-radius: 5px;
 }
 
-.guidance-entry a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-    font-size: 18px;
+.guidance-entry:hover{
+
+    background-color: rgba(255, 255, 255, 0.658);
+    transition: 0.5s;
+
 }
+
+.guidance-entry a {
+   
+    color: #fff;
+    
+}
+
 
 p1 {
     margin-top: 50px;
