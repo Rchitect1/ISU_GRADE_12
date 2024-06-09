@@ -19,6 +19,7 @@ body {
     background-position: center;
     background-size: cover;
     overflow-x: hidden;
+    position: relative;
 }
 
 .footer p {
@@ -40,37 +41,35 @@ nav {
     padding: 0;
 }
 
-nav .logo {
+.logo {
     display: flex;
     align-items: center;
+    margin-left: 18px;
 }
 
-nav .logo img {
+.logo img {
     width: 125px;
     margin-right: 10px;
 }
 
-nav .logo h1 {
+.logo h1 {
     color: #fff;
     font-size: 25px;
     margin: 0;
 }
 
 nav ul {
-    text-align: center;
-    font-size: x-large;
+    display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
 }
 
 nav ul li {
-    display: inline-block;
     margin-left: 10px;
-}
-
-nav ul li:first-child {
-    margin-left: auto;
 }
 
 nav ul li a {
@@ -94,17 +93,34 @@ nav ul li:hover::after {
     transition: width 0.5s;
 }
 
-    .menu-btn,
+.menu-btn,
 nav .close-btn {
     display: none;
+}
+
+.guidance-entry {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.guidance-entry a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 p1 {
     margin-top: 50px;
 }
 
+
 .content {
-    margin-top: 12.5%;
+    margin-top: 5%;
     margin-left: 9%;
     margin-right: 9%;
     color: #fff;
@@ -264,6 +280,13 @@ p1.slide-left.delay {
 
 /* Responsive Styles */
 @media (max-width: 1200px) {
+
+    .content{
+        margin-top: -10%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
+    }
     .content h1 {
         font-size: 125px;
         line-height: 100px;
@@ -275,6 +298,14 @@ p1.slide-left.delay {
 }
 
 @media (max-width: 992px) {
+
+    .content{
+        margin-top: -15%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
+    }
+
     nav ul {
         font-size: large;
     }
@@ -302,7 +333,7 @@ p1.slide-left.delay {
 
 @media (max-width: 768px) {
 
-    nav {
+      nav {
         position: absolute;
         background: #2e2e2e;
         height: 100vh;
@@ -312,46 +343,47 @@ p1.slide-left.delay {
         right: 0;
         margin-left: auto;
         z-index: 2;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0s, linear 0.3s; 
 
     }
 
-    .menu-btn{
+    .menu-btn {
         position: absolute;
-        top: 3%;
-        right: 250px; 
+        top: 18px;
+        right: 18px; 
         display: block;
-        margin-left: auto;
-
-    }
-
-    nav ul li .close-btn{
-        position: absolute;
-        top: 20%;
-        right:100%;
-        display: block;
-        margin-left: auto;
-    }
-
-    .show-menu {
-        display: block; 
     }
 
     nav ul li .close-btn {
-        display: none; 
+        position: absolute;
+        top: -435px;
+        right: 18px;
+        display: block;
+    }
+
+    .show-menu {
+        opacity: 1;
+        visibility: visible;
+        right: 0;
+        transition: opacity 0.3s, visibility 0s, right 0.3s;
     }
 
     .show-menu .menu-btn {
         display: none;
     }
-        .show-menu ul li .close-btn {
-            display: block;
-    
-        }
 
-  
+    .show-menu nav ul li .close-btn {
+        display: block;
+    }
 
-    .guidance-entry{
-        display: none;
+    .guidance-entry {
+        font-size: xx-large;
+        text-align: center;
+        position: absolute;
+        top: -380px;
+        right: 70px; 
     }
 
     nav ul li {
@@ -364,42 +396,193 @@ p1.slide-left.delay {
     nav ul li:hover::after {
         width: 0%;
     }
+    
+    
 
 
-    nav .logo {
-        position: absolute;
-        top: 1%;
-        right: 170%;
-        margin-bottom: 0px;
-    }
     .content {
         margin: 10%;
+        margin-top: -10%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
     }
     .content h1 {
-        font-size: 80px;
+        font-size: 115px;
         line-height: 60px;
+        
     }
     .txt h1 {
         font-size: 40px;
     }
+
+    .content p{
+        margin-top: -15%;
+        font-size: 25px; 
+    }
+    .content p1 {
+        margin-top: -10%;
+        font-size: 15px;
+    }
+
+    .content .links{
+        margin-top: 17%;
+    }
+    
+
+    @keyframes slideleft {
+        0% {
+            transform: translate(25px);
+            opacity: 0;
+        }
+        100% {
+            transform: translate(0px);
+            opacity: 1;
+        }
+    }
 }
 
+
+
 @media (max-width: 576px) {
-    nav ul li {
-        display: block;
-        margin: 10px 0;
-    }
+    
     .content {
-        margin: 5%;
+        margin: 10%;
+        margin-top: -10%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
     }
     .content h1 {
-        font-size: 50px;
-        line-height: 40px;
+        font-size: 99px;
+        line-height: 60px;
+        
     }
     .txt h1 {
-        font-size: 30px;
+        font-size: 40px;
     }
-    .txt p {
-        font-size: 18px;
+
+    .content p{
+        margin-top: -20%;
+        font-size: 25px;
+       
     }
+    .content p1 {
+        margin-top: -15%;
+        font-size: 15px;
+    }
+
+    .content .links{
+        margin-top: 25%;
+
+    }
+    
+
+    @keyframes slideleft {
+        0% {
+            transform: translate(0px);
+            opacity: 0;
+        }
+        100% {
+            transform: translate(0px);
+            opacity: 1;
+        }
+    }
+   
+}
+
+@media (max-width: 430px) {
+    
+    .content {
+        margin: 10%;
+        margin-top: -20%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
+    }
+    .content h1 {
+        font-size: 70px;
+        line-height: 60px;
+        text-align: center;
+        
+    }
+    .txt h1 {
+        font-size: 40px;
+    }
+
+    .content p{
+        text-align: center;
+        margin-top: -40%;
+        font-size: 17px;
+        margin-right: 7%;
+       
+    }
+    .content p1 {
+        text-align: center;
+        margin-top: -15%;
+        font-size: 15px;
+        margin-right: 7%;
+    }
+
+    .content .links{
+        margin-top: 25%;
+        margin: 10%;
+
+    }
+
+    .btn{
+        margin: 3%;
+        margin-left: 20%;
+
+
+    }
+    
+}
+
+@media (max-width: 390px) {
+    
+    .content {
+        margin: 5%;
+        margin-top: -20%;
+        margin-left: 9%;
+        margin-right: 9%;
+        color: #fff;
+    }
+    .content h1 {
+        font-size: 70px;
+        line-height: 60px;
+        text-align: center;
+        
+    }
+    .txt h1 {
+        font-size: 40px;
+    }
+
+    .content p{
+        text-align: center;
+        margin-top: -27%;
+        font-size: 17px;
+        margin-right: 7%;
+       
+    }
+    .content p1 {
+        text-align: center;
+        margin-top: -10%;
+        font-size: 15px;
+        margin-right: 7%;
+    }
+
+    .content .links{
+        margin-top: 25%;
+        margin: 10%;
+
+    }
+
+    .btn{
+        margin: 3%;
+        margin-left: 20%;
+
+
+    }
+    
 }
