@@ -94,7 +94,8 @@ nav ul li:hover::after {
     transition: width 0.5s;
 }
 
-nav .fa{
+    .menu-btn,
+nav .close-btn {
     display: none;
 }
 
@@ -301,15 +302,56 @@ p1.slide-left.delay {
 
 @media (max-width: 768px) {
 
-    nav{
+    nav {
         position: absolute;
-        background:#fefff1; 
+        background: #2e2e2e;
         height: 100vh;
         width: 250px;
         top: 0;
-        right: 100%;
-        text-align: left;
+        left: 0; 
+        right: 0;
+        margin-left: auto;
         z-index: 2;
+
+    }
+
+    .menu-btn{
+        position: absolute;
+        top: 3%;
+        right: 250px; 
+        display: block;
+        margin-left: auto;
+
+    }
+
+    nav ul li .close-btn{
+        position: absolute;
+        top: 20%;
+        right:100%;
+        display: block;
+        margin-left: auto;
+    }
+
+    .show-menu {
+        display: block; 
+    }
+
+    nav ul li .close-btn {
+        display: none; 
+    }
+
+    .show-menu .menu-btn {
+        display: none;
+    }
+        .show-menu ul li .close-btn {
+            display: block;
+    
+        }
+
+  
+
+    .guidance-entry{
+        display: none;
     }
 
     nav ul li {
@@ -319,17 +361,16 @@ p1.slide-left.delay {
         position: relative;
     }
 
-    nav .fa{
-        display: block;
-        color: #000000;
-        margin: 10px;
-        font-size: 22px;
-        cursor: pointer;
+    nav ul li:hover::after {
+        width: 0%;
     }
 
 
     nav .logo {
-        margin-bottom: 10px;
+        position: absolute;
+        top: 1%;
+        right: 170%;
+        margin-bottom: 0px;
     }
     .content {
         margin: 10%;

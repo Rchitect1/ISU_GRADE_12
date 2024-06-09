@@ -19,11 +19,16 @@
         </div>
         <ul>
             <li>
-                <a href="/login">Guidance Entry</a></li>
+        
+                <i class="close-btn" onclick="toggleMenu()"><img src="static/image/close.png"></i>
+                <div class = "guidance-entry">
+                <a href="/login">Guidance Entry</a>
+            </div>
+            </li>
         </ul>
     </nav>
 
-
+<i class="menu-btn" onclick="toggleMenu()"><img src="static/image/menu.png" ></i>
 
  
 
@@ -105,10 +110,12 @@
     // Call the function when the page loads
     window.onload = displayRandomQuote;
 
+
+    function toggleMenu() {
+        var nav = document.querySelector('nav');
+        nav.classList.toggle('show-menu');
+    }
+
     </script>
 
 </div>
-
-
-
-
