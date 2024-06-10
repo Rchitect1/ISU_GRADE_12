@@ -3,12 +3,6 @@ from flask_session import Session
 import sqlite3
 from bs4 import BeautifulSoup
 
-
-
-
-conn = sqlite3.connect("peer_tutor.db")
-c = conn.cursor
-
 app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
@@ -22,10 +16,40 @@ def index():
 
 @app.route("/matches")
 def matches():
-    con = sqlite3.connect("peer_tutor.db")
+    con = sqlite3.connect("records.db")
     cur = con.cursor()
-    res = cur.execute("select students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match_id;")
-    return render_template("matches.html", matches_list=res.fetchall())
+    res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match;")
+    lst = res.fetchall()
+    con.close()
+    return render_template("matches.html", matches_list=lst)
+
+@app.route("/remove_s/<student_id>")
+def remove_s(student_id):
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+    cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+    con.commit()
+    con.close()
+    return redirect("/matches")
+
+@app.route("/remove_t/<student_id>")
+def remove_t(student_id):
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+    cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
+    con.commit()
+    con.close()
+    return redirect("/matches")
+
+@app.route("/remove_m/<student_id>")
+def remove_m(student_id):
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+    cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
+    cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
+    con.commit()
+    con.close()
+    return redirect("/matches")
 
 @app.route("/login")
 def login():
@@ -50,9 +74,6 @@ def thank():
 
 @app.route("/signout")
 def signout():
-    email = ""
-    password = ""
-    code = ""
     return render_template("index.html")
 
 
@@ -66,7 +87,7 @@ def submit_login():
 
         #nHsmarket1824-4202#ptsklcd
         #891742
-        return redirect(url_for("matches"))
+        return redirect("/matches")
     else:
         return redirect(url_for("login", showModal='true', message="Invalid code"))
 
@@ -81,7 +102,7 @@ def submit_tutor_form():
 
     matchMacking([name, email, phone, grade, course, period], "Tutor")
 
-    return redirect(url_for("thank"))
+    return redirect("/thank")
 
 app.route("/submit_student_form", methods=["POST"])
 def submit_tutor_form():
@@ -94,9 +115,11 @@ def submit_tutor_form():
 
     matchMacking([name, email, phone, grade, course, period], "Student")
 
-    return render_template("thank.html")
+    return redirect("/thank")
 
 def matchMacking(data, form):
+    conn = sqlite3.connect("records.db")
+    c = conn.cursor()
     data = 0
     form = 0
 
@@ -124,8 +147,19 @@ def matchMacking(data, form):
 
         insert = [sId, name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
-
+        
+    if(True): # if form is tutor
+        s = c.execute("SELECT name FROM sqlite_master WHERE name='students'")
+        for row in c.execute("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == None"): #if no match value, might be null? i dont know
+          
+            if(row[1] < grade and row[2] == course and row[8] == period ): #if grade smaller, same subject and period
+                if (match != None):
+                    match = row[5] #tutor match= student ID
+                else:
+                    match = None
+                    
     conn.commit()
+    conn.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -134,4 +168,3 @@ if __name__ == "__main__":
 # def doMatchmaking():
 #     return null
 
-conn.close()
