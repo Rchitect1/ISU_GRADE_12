@@ -159,6 +159,24 @@ p1 {
     opacity: 0;
 }
 
+
+.matches {
+    margin-top: 10%;
+    margin-left: 9%;
+    margin-right: 9%;
+    color: #fff;
+}
+
+.matches h1 {
+    font-size: 200px;
+    line-height: 140px;
+    font-weight: 600;
+}
+
+
+
+
+
 .content .links {
     position: absolute;
     top: 37.5%;
