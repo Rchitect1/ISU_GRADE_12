@@ -98,7 +98,7 @@ def submit_tutor_form():
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
-    if (lastLetter == 'M'):
+    if (lastLetter == 'U'):
         type = "University"
     elif (lastLetter == 'C'):
         type = "College"
@@ -106,6 +106,12 @@ def submit_tutor_form():
         type = "Open"
     elif (lastLetter == 'M'):
         type = "College/Univesity"
+
+    lastLetter = subject[len(subject)-2] # actual last letter
+    if (lastLetter == G):
+        type += " (Gifted)"
+    elif (lastLetter == E):
+        type += " (Enriched)"
 
     period = request.form["period"]
     phone = request.form["phone"]
@@ -124,7 +130,7 @@ def submit_tutor_form():
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
-    if (lastLetter == 'M'):
+    if (lastLetter == 'U'):
         type = "University"
     elif (lastLetter == 'C'):
         type = "College"
@@ -132,6 +138,12 @@ def submit_tutor_form():
         type = "Open"
     elif (lastLetter == 'M'):
         type = "College/Univesity"
+
+    lastLetter = subject[len(subject)-2] # actual last letter
+    if (lastLetter == G):
+        type += " (Gifted)"
+    elif (lastLetter == E):
+        type += " (Enriched)"
 
     period = request.form["period"]
     phone = request.form["phone"]
