@@ -169,22 +169,21 @@ def matchMacking(data, form):
     school = data[7]
 
     if(form == "Student"): # if form is student
-        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[1] > grade and row[2] == course and row[5] == period ): #if grade bigger, same subject and period
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+            if(row[2] > grade and row[3] == subject and row[5] == period ): #if grade bigger, same subject and period
                 if (match != None):
-                    match = row[0] #student match= tutor ID
+                    match = row[0] #student match = tutor ID
 
-        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+        insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        for row in c.executemany("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
-          
-            if(row[1] < grade and row[2] == course and row[5] == period ): #if grade smaller, same subject and period
+        for row in c.executemany("SELECT id, nam e, grade, subject, type, period, phone, email, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+            if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
                 if (match != None):
                     match = row[0] #tutor match = student ID
-                    
-        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+
+        insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO tutors VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
                     
     conn.commit()
