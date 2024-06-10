@@ -134,19 +134,16 @@ def matchMacking(data, form):
         sId += 1
 
     if(form == "Student"): # if form is student
-        t = c.execute("SELECT name FROM sqlite_master WHERE name='tutors'")
-        for row in c.execute("SELECT id, grade, subject, match, type, period FROM tutors ORDER BY id WHERE match == None"): #if no match value, might be null? i dont know
+        for row in c.executemany("SELECT id, grade, subject, match, type, period FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
           
-            if(row[1] > grade and row[2] == course and row[8] == period ): #if grade bigger, same subject and period
+            if(row[1] > grade and row[2] == course and row[5] == period ): #if grade bigger, same subject and period
                 if (match != None):
-                    match = row[5] #student match= tutor ID
-                else:
-                    match = None
+                    match = row[0] #student match= tutor ID
 
-        insert = [sId, name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
-    if(True): # if form is tutor
+    if(form == "Tutor"): # if form is tutor
         s = c.execute("SELECT name FROM sqlite_master WHERE name='students'")
         for row in c.execute("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == None"): #if no match value, might be null? i dont know
           
