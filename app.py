@@ -107,7 +107,7 @@ def submit_tutor_form():
     elif (lastLetter == 'M'):
         type = "College/Univesity"
 
-    lastLetter = subject[len(subject)-2] # actual last letter
+    lastLetter = subject[len(subject)-1] # actual last letter
     if (lastLetter == G):
         type += " (Gifted)"
     elif (lastLetter == E):
@@ -119,7 +119,7 @@ def submit_tutor_form():
     match = request.form["match"]
     school = request.form["school"]
         
-    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Tutor")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
     return redirect("/thank")
 
@@ -139,7 +139,7 @@ def submit_tutor_form():
     elif (lastLetter == 'M'):
         type = "College/Univesity"
 
-    lastLetter = subject[len(subject)-2] # actual last letter
+    lastLetter = subject[len(subject)-1] # actual last letter
     if (lastLetter == G):
         type += " (Gifted)"
     elif (lastLetter == E):
@@ -148,10 +148,9 @@ def submit_tutor_form():
     period = request.form["period"]
     phone = request.form["phone"]
     email = request.form["email"]
-    match = request.form["match"]
     school = request.form["school"]
         
-    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Student")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
     return redirect("/thank")
 
@@ -160,20 +159,17 @@ def matchMacking(data, form):
     c = conn.cursor()
 
     name = data[0]
-    email = data[1]
-    phone = data[2]
-    grade = data[3]
-    course = data[4]
-    period = data[5]
+    grade = data[1]
+    subject = data[2]
+    type = data[3]
+    period = data[4]
+    phone = data[5]
+    email = data[6]
     match = None
-
-    sId = 0 #student ID
-    for row in c.execute:
-        sId += 1
+    school = data[7]
 
     if(form == "Student"): # if form is student
-        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
-          
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
             if(row[1] > grade and row[2] == course and row[5] == period ): #if grade bigger, same subject and period
                 if (match != None):
                     match = row[0] #student match= tutor ID
