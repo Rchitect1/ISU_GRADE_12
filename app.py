@@ -94,26 +94,52 @@ def submit_login():
 app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
     name = request.form["full-name"]
-    email = request.form["email"]
-    phone = request.form["phone"]
     grade = request.form["grade"]
-    period = request.form["period"]
-    course = request.form["subject"]
+    subject = request.form["subject"]
+    
+    lastLetter = subject[len(subject)-2] # second last letter
+    if (lastLetter == 'M'):
+        type = "University"
+    elif (lastLetter == 'C'):
+        type = "College"
+    elif (lastLetter == 'O'):
+        type = "Open"
+    elif (lastLetter == 'M'):
+        type = "College/Univesity"
 
-    matchMacking([name, email, phone, grade, course, period], "Tutor")
+    period = request.form["period"]
+    phone = request.form["phone"]
+    email = request.form["email"]
+    match = request.form["match"]
+    school = request.form["school"]
+        
+    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Tutor")
 
     return redirect("/thank")
 
 app.route("/submit_student_form", methods=["POST"])
 def submit_tutor_form():
     name = request.form["full-name"]
-    email = request.form["email"]
-    phone = request.form["phone"]
     grade = request.form["grade"]
-    period = request.form["period"]
-    course = request.form["subject"]
+    subject = request.form["subject"]
+    
+    lastLetter = subject[len(subject)-2] # second last letter
+    if (lastLetter == 'M'):
+        type = "University"
+    elif (lastLetter == 'C'):
+        type = "College"
+    elif (lastLetter == 'O'):
+        type = "Open"
+    elif (lastLetter == 'M'):
+        type = "College/Univesity"
 
-    matchMacking([name, email, phone, grade, course, period], "Student")
+    period = request.form["period"]
+    phone = request.form["phone"]
+    email = request.form["email"]
+    match = request.form["match"]
+    school = request.form["school"]
+        
+    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Student")
 
     return redirect("/thank")
 
@@ -134,7 +160,7 @@ def matchMacking(data, form):
         sId += 1
 
     if(form == "Student"): # if form is student
-        for row in c.executemany("SELECT id, grade, subject, match, type, period FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
           
             if(row[1] > grade and row[2] == course and row[5] == period ): #if grade bigger, same subject and period
                 if (match != None):
@@ -144,14 +170,14 @@ def matchMacking(data, form):
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        s = c.execute("SELECT name FROM sqlite_master WHERE name='students'")
-        for row in c.execute("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == None"): #if no match value, might be null? i dont know
+        for row in c.executemany("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
           
-            if(row[1] < grade and row[2] == course and row[8] == period ): #if grade smaller, same subject and period
+            if(row[1] < grade and row[2] == course and row[5] == period ): #if grade smaller, same subject and period
                 if (match != None):
-                    match = row[5] #tutor match= student ID
-                else:
-                    match = None
+                    match = row[0] #tutor match = student ID
+                    
+        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+        c.executemany("INSERT INTO tutors VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
                     
     conn.commit()
     conn.close()
