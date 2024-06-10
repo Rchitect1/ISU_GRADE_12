@@ -120,8 +120,6 @@ def submit_tutor_form():
 def matchMacking(data, form):
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
-    data = 0
-    form = 0
 
     name = data[0]
     email = data[1]
@@ -135,7 +133,7 @@ def matchMacking(data, form):
     for row in c.execute:
         sId += 1
 
-    if(True): # if form is student
+    if(form == "Student"): # if form is student
         t = c.execute("SELECT name FROM sqlite_master WHERE name='tutors'")
         for row in c.execute("SELECT id, grade, subject, match, type, period FROM tutors ORDER BY id WHERE match == None"): #if no match value, might be null? i dont know
           
