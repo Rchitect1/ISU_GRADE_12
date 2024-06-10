@@ -14,14 +14,29 @@ Session(app)
 def index():
     return render_template("index.html")
 
-@app.route("/matches")
+@app.route("/matches", methods=["POST"])
 def matches():
-    con = sqlite3.connect("records.db")
-    cur = con.cursor()
-    res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match;")
-    lst = res.fetchall()
-    con.close()
-    return render_template("matches.html", matches_list=lst)
+    if request.method() == "POST":   
+        con = sqlite3.connect("records.db")
+        cur = con.cursor()
+
+        school_code = request.form["school-code"]
+        code = request.form["code"]
+
+        sclcd_List = cur.executemany("select school_code FROM schools;")
+        cd_List = cur.executemany("select code FROM schools;")
+
+        if  school_code in sclcd_List and code in cd_List:
+            schl_id =  cur.execute("select id from schools where code = ?;", code)
+            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and student.school = ?;", schl_id)
+            lst = res.fetchall()
+            con.close()
+            return render_template("matches.html", matches_list=lst)
+        else:
+            con.close()
+            return redirect(url_for("login", showModal='true', message="Invalid code"))
+    else:
+        return redirect("/login")
 
 @app.route("/remove_s/<student_id>")
 def remove_s(student_id):
@@ -75,21 +90,6 @@ def thank():
 @app.route("/signout")
 def signout():
     return render_template("index.html")
-
-
-@app.route("/submit_login", methods=["POST"])
-def submit_login():
-
-    school_code = request.form["school-code"]
-    code = request.form["code"]
-
-    if code == "123456" and school_code == "654321":
-
-        #nHsmarket1824-4202#ptsklcd
-        #891742
-        return redirect("/matches")
-    else:
-        return redirect(url_for("login", showModal='true', message="Invalid code"))
 
 app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
