@@ -94,7 +94,11 @@ def signout():
 app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
     name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    school = request.form["school"]
     grade = request.form["grade"]
+    period = request.form["period"]
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
@@ -108,25 +112,26 @@ def submit_tutor_form():
         type = "College/Univesity"
 
     lastLetter = subject[len(subject)-1] # actual last letter
-    if (lastLetter == G):
+    if (lastLetter == 'G'):
         type += " (Gifted)"
-    elif (lastLetter == E):
+    elif (lastLetter == 'E'):
         type += " (Enriched)"
 
-    period = request.form["period"]
-    phone = request.form["phone"]
-    email = request.form["email"]
+    
     match = request.form["match"]
-    school = request.form["school"]
         
     matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
     return redirect("/thank")
 
 app.route("/submit_student_form", methods=["POST"])
-def submit_tutor_form():
+def submit_student_form():
     name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    school = request.form["school"]
     grade = request.form["grade"]
+    period = request.form["period"]
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
@@ -140,15 +145,10 @@ def submit_tutor_form():
         type = "College/Univesity"
 
     lastLetter = subject[len(subject)-1] # actual last letter
-    if (lastLetter == G):
+    if (lastLetter == 'G'):
         type += " (Gifted)"
-    elif (lastLetter == E):
+    elif (lastLetter == 'E'):
         type += " (Enriched)"
-
-    period = request.form["period"]
-    phone = request.form["phone"]
-    email = request.form["email"]
-    school = request.form["school"]
         
     matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
