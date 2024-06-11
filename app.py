@@ -108,9 +108,9 @@ def submit_tutor_form():
         type = "College/Univesity"
 
     lastLetter = subject[len(subject)-2] # actual last letter
-    if (lastLetter == G):
+    if (lastLetter == "G"):
         type += " (Gifted)"
-    elif (lastLetter == E):
+    elif (lastLetter == "E"):
         type += " (Enriched)"
 
     period = request.form["period"]
@@ -140,9 +140,9 @@ def submit_tutor_form():
         type = "College/Univesity"
 
     lastLetter = subject[len(subject)-2] # actual last letter
-    if (lastLetter == G):
+    if (lastLetter == "G"):
         type += " (Gifted)"
-    elif (lastLetter == E):
+    elif (lastLetter == "E"):
         type += " (Enriched)"
 
     period = request.form["period"]
