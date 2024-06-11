@@ -169,7 +169,7 @@ def matchMacking(data, form):
 
     if(form == "Student"): # if form is student
         for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] > grade and row[3] == subject and row[5] == period ): #if grade bigger, same subject and period
+            if(row[2] > grade and row[3] == subject and row[5] == period and row[9] == school): #if grade bigger, same subject and period
                 if (match == None):
                     match = row[0] #student match = tutor ID
 
@@ -178,7 +178,7 @@ def matchMacking(data, form):
         
     if(form == "Tutor"): # if form is tutor
         for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
+            if(row[2] < grade and row[3] == subject and row[5] == period and row[9] == school ): #if grade smaller, same subject and period
                 if (match == None):
                     match = row[0] #tutor match = student ID
 
