@@ -9,7 +9,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -19,6 +18,7 @@ def matches():
     if request.method == "POST":   
         con = sqlite3.connect("records.db")
         cur = con.cursor()
+        print(request.form)
 
         school_code = request.form["school-code"]
         code = request.form["code"]
@@ -85,14 +85,13 @@ def tutor_form():
 def thank():
     return render_template("thank.html")
 
-
 @app.route("/signout")
 def signout():
     return render_template("index.html")
 
-app.route("/submit_tutor_form", methods=["POST"])
+@app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
-    name = request.form["full-name"]
+    name = request.form["full_name"]
     email = request.form["email"]
     phone = request.form["phone"]
     school = request.form["school"]
@@ -109,31 +108,30 @@ def submit_tutor_form():
         type = "Open"
     elif (lastLetter == 'M'):
         type = "College/Univesity"
+    else:
+        type = "Other"
 
     lastLetter = subject[len(subject)-1] # actual last letter
     if (lastLetter == 'G'):
         type += " (Gifted)"
     elif (lastLetter == 'E'):
         type += " (Enriched)"
-
-    
-    match = request.form["match"]
-
-    print([name, grade, subject, type, period, phone, email, school])
         
-    # matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
-    # return redirect("/thank")
+    return redirect("/thank")
 
-app.route("/submit_student_form", methods=["POST"])
+@app.route("/submit_student_form", methods=["POST"])
 def submit_student_form():
-    name = request.form["full-name"]
+    print(request.form)
+    name = request.form["full_name"]
     email = request.form["email"]
     phone = request.form["phone"]
     school = request.form["school"]
     grade = request.form["grade"]
     period = request.form["period"]
     subject = request.form["subject"]
+    type = None
     
     lastLetter = subject[len(subject)-2] # second last letter
     if (lastLetter == 'U'):
@@ -150,12 +148,10 @@ def submit_student_form():
         type += " (Gifted)"
     elif (lastLetter == 'E'):
         type += " (Enriched)"
-    
-    print([name, grade, subject, type, period, phone, email, school])
         
-    # matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
-    # return redirect("/thank")
+    return redirect("/thank")
 
 def matchMacking(data, form):
     conn = sqlite3.connect("records.db")
@@ -173,7 +169,7 @@ def matchMacking(data, form):
 
     if(form == "Student"): # if form is student
         for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] > grade and row[3] == subject and row[5] == period ): #if grade bigger, same subject and period
+            if(row[2] > grade and row[3] == subject and row[5] == period and row[9] == school): #if grade bigger, same subject and period
                 if (match == None):
                     match = row[0] #student match = tutor ID
 
@@ -181,8 +177,8 @@ def matchMacking(data, form):
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        for row in c.executemany("SELECT id, nam e, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+            if(row[2] < grade and row[3] == subject and row[5] == period and row[9] == school ): #if grade smaller, same subject and period
                 if (match == None):
                     match = row[0] #tutor match = student ID
 
@@ -191,7 +187,7 @@ def matchMacking(data, form):
                     
     conn.commit()
     conn.close()
-
+    
 if __name__ == "__main__":
     app.run(debug=True)
 
