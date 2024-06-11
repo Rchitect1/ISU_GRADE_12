@@ -25,8 +25,6 @@ def matches():
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
 
-        print(sclcd_List)
-
         if  school_code in sclcd_List[0] and code == "978659":
             schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
             res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and students.school = ?;", schl_id)
@@ -120,10 +118,12 @@ def submit_tutor_form():
 
     
     match = request.form["match"]
-        
-    matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
-    return redirect("/thank")
+    print([name, grade, subject, type, period, phone, email, school])
+        
+    # matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
+
+    # return redirect("/thank")
 
 app.route("/submit_student_form", methods=["POST"])
 def submit_student_form():
@@ -150,10 +150,12 @@ def submit_student_form():
         type += " (Gifted)"
     elif (lastLetter == 'E'):
         type += " (Enriched)"
+    
+    print([name, grade, subject, type, period, phone, email, school])
         
-    matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
+    # matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
-    return redirect("/thank")
+    # return redirect("/thank")
 
 def matchMacking(data, form):
     conn = sqlite3.connect("records.db")
