@@ -94,7 +94,11 @@ def signout():
 app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
     name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    school = request.form["school"]
     grade = request.form["grade"]
+    period = request.form["period"]
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
@@ -107,26 +111,27 @@ def submit_tutor_form():
     elif (lastLetter == 'M'):
         type = "College/Univesity"
 
-    lastLetter = subject[len(subject)-2] # actual last letter
-    if (lastLetter == "G"):
+    lastLetter = subject[len(subject)-1] # actual last letter
+    if (lastLetter == 'G'):
         type += " (Gifted)"
-    elif (lastLetter == "E"):
+    elif (lastLetter == 'E'):
         type += " (Enriched)"
 
-    period = request.form["period"]
-    phone = request.form["phone"]
-    email = request.form["email"]
+    
     match = request.form["match"]
-    school = request.form["school"]
         
-    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Tutor")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
     return redirect("/thank")
 
 app.route("/submit_student_form", methods=["POST"])
-def submit_tutor_form():
+def submit_student_form():
     name = request.form["full-name"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    school = request.form["school"]
     grade = request.form["grade"]
+    period = request.form["period"]
     subject = request.form["subject"]
     
     lastLetter = subject[len(subject)-2] # second last letter
@@ -139,19 +144,13 @@ def submit_tutor_form():
     elif (lastLetter == 'M'):
         type = "College/Univesity"
 
-    lastLetter = subject[len(subject)-2] # actual last letter
-    if (lastLetter == "G"):
+    lastLetter = subject[len(subject)-1] # actual last letter
+    if (lastLetter == 'G'):
         type += " (Gifted)"
-    elif (lastLetter == "E"):
+    elif (lastLetter == 'E'):
         type += " (Enriched)"
-
-    period = request.form["period"]
-    phone = request.form["phone"]
-    email = request.form["email"]
-    match = request.form["match"]
-    school = request.form["school"]
         
-    matchMacking([name, grade, subject, type, period, phone, email, match, school], "Student")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
     return redirect("/thank")
 
@@ -160,35 +159,31 @@ def matchMacking(data, form):
     c = conn.cursor()
 
     name = data[0]
-    email = data[1]
-    phone = data[2]
-    grade = data[3]
-    course = data[4]
-    period = data[5]
+    grade = data[1]
+    subject = data[2]
+    type = data[3]
+    period = data[4]
+    phone = data[5]
+    email = data[6]
     match = None
-
-    sId = 0 #student ID
-    for row in c.execute:
-        sId += 1
+    school = data[7]
 
     if(form == "Student"): # if form is student
-        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
-          
-            if(row[1] > grade and row[2] == course and row[5] == period ): #if grade bigger, same subject and period
-                if (match != None):
-                    match = row[0] #student match= tutor ID
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+            if(row[2] > grade and row[3] == subject and row[5] == period ): #if grade bigger, same subject and period
+                if (match == None):
+                    match = row[0] #student match = tutor ID
 
-        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+        insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        for row in c.executemany("SELECT id, grade, subject, match, type, period FROM students ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know
-          
-            if(row[1] < grade and row[2] == course and row[5] == period ): #if grade smaller, same subject and period
-                if (match != None):
+        for row in c.executemany("SELECT id, nam e, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+            if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
+                if (match == None):
                     match = row[0] #tutor match = student ID
-                    
-        insert = [name, email, grade, course, match, "university", phone, period] #i need to find out how to do course type, its missing from here
+
+        insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
         c.executemany("INSERT INTO tutors VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
                     
     conn.commit()
