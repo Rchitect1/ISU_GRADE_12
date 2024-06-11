@@ -19,6 +19,7 @@ def matches():
     if request.method == "POST":   
         con = sqlite3.connect("records.db")
         cur = con.cursor()
+        print(request.form)
 
         school_code = request.form["school-code"]
         code = request.form["code"]
@@ -90,9 +91,9 @@ def thank():
 def signout():
     return render_template("index.html")
 
-app.route("/submit_tutor_form", methods=["POST"])
+@app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
-    name = request.form["full-name"]
+    name = request.form["full_name"]
     email = request.form["email"]
     phone = request.form["phone"]
     school = request.form["school"]
@@ -115,25 +116,22 @@ def submit_tutor_form():
         type += " (Gifted)"
     elif (lastLetter == 'E'):
         type += " (Enriched)"
-
-    
-    match = request.form["match"]
-
-    print([name, grade, subject, type, period, phone, email, school])
         
-    # matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
-    # return redirect("/thank")
+    return redirect("/thank")
 
-app.route("/submit_student_form", methods=["POST"])
+@app.route("/submit_student_form", methods=["POST"])
 def submit_student_form():
-    name = request.form["full-name"]
+    print(request.form)
+    name = request.form["full_name"]
     email = request.form["email"]
     phone = request.form["phone"]
     school = request.form["school"]
     grade = request.form["grade"]
     period = request.form["period"]
     subject = request.form["subject"]
+    type = None
     
     lastLetter = subject[len(subject)-2] # second last letter
     if (lastLetter == 'U'):
@@ -150,12 +148,10 @@ def submit_student_form():
         type += " (Gifted)"
     elif (lastLetter == 'E'):
         type += " (Enriched)"
-    
-    print([name, grade, subject, type, period, phone, email, school])
         
-    # matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
+    matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
-    # return redirect("/thank")
+    return redirect("/thank")
 
 def matchMacking(data, form):
     conn = sqlite3.connect("records.db")
