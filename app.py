@@ -9,6 +9,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+studentHolder = [] #for storing displaced students/tutors when REMOVED
+tutorHolder = []
 
 @app.route("/")
 def index():
@@ -178,7 +180,7 @@ def matchMacking(data, form):
         c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        for row in c.executemany("SELECT id, nam e, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
+        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
             if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
                 if (match == None):
                     match = row[0] #tutor match = student ID
@@ -188,7 +190,7 @@ def matchMacking(data, form):
                     
     conn.commit()
     conn.close()
-
+    
 if __name__ == "__main__":
     app.run(debug=True)
 
