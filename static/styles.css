@@ -279,15 +279,15 @@ p1.slide-left.delay {
     background-color: #575757;
 }
 
+
 .txt h1 {
     position: absolute;
     text-align: center;
     left: 50%;
-    top: 12.5%;
+    top: 25%;
     transform: translateX(-50%);
     color: #fff;
     font-size: 75px;
-    line-height: 140px;
     font-weight: 600;
 }
 
@@ -295,11 +295,11 @@ p1.slide-left.delay {
     position: absolute;
     text-align: center;
     left: 50%;
-    top: 20%;
+    top: 38%;
     transform: translateX(-50%);
     color: #fff;
     font-size: 25px;
-    line-height: 140px;
+    line-height: 50px;
     font-weight: 50;
 }
 
@@ -316,9 +316,6 @@ p1.slide-left.delay {
         font-size: 125px;
         line-height: 100px;
         margin-top: 25%; 
-    }
-    .txt h1 {
-        font-size: 60px;
     }
 }
 
@@ -354,6 +351,7 @@ p1.slide-left.delay {
     .content .links{
         margin-top: 17%;
     }
+
 }
 
 @media (max-width: 768px) {
@@ -437,9 +435,6 @@ p1.slide-left.delay {
         line-height: 60px;
         
     }
-    .txt h1 {
-        font-size: 40px;
-    }
 
     .content p{
         margin-top: -15%;
@@ -482,9 +477,6 @@ p1.slide-left.delay {
         font-size: 99px;
         line-height: 60px;
         
-    }
-    .txt h1 {
-        font-size: 40px;
     }
 
     .content p{
@@ -531,9 +523,6 @@ p1.slide-left.delay {
         text-align: center;
         
     }
-    .txt h1 {
-        font-size: 40px;
-    }
 
     .content p{
         text-align: center;
@@ -579,9 +568,6 @@ p1.slide-left.delay {
         text-align: center;
         
     }
-    .txt h1 {
-        font-size: 40px;
-    }
 
     .content p{
         text-align: center;
@@ -608,6 +594,15 @@ p1.slide-left.delay {
         margin-left: 20%;
 
 
+    }
+
+    .txt h1 {
+        font-size: 30px;
+        line-height: 200px;
+    }
+    .txt p {
+        top: 27.5%;
+        line-height: 50px;
     }
     
 }
