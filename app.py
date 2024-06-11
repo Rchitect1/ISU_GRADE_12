@@ -9,9 +9,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-studentHolder = [] #for storing displaced students/tutors when REMOVED
-tutorHolder = []
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -87,7 +84,6 @@ def tutor_form():
 def thank():
     return render_template("thank.html")
 
-
 @app.route("/signout")
 def signout():
     return render_template("index.html")
@@ -111,6 +107,8 @@ def submit_tutor_form():
         type = "Open"
     elif (lastLetter == 'M'):
         type = "College/Univesity"
+    else:
+        type = "Other"
 
     lastLetter = subject[len(subject)-1] # actual last letter
     if (lastLetter == 'G'):
