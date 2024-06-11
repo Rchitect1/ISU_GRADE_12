@@ -16,19 +16,20 @@ def index():
 
 @app.route("/matches", methods=["POST"])
 def matches():
-    if request.method() == "POST":   
+    if request.method == "POST":   
         con = sqlite3.connect("records.db")
         cur = con.cursor()
 
         school_code = request.form["school-code"]
         code = request.form["code"]
 
-        sclcd_List = cur.executemany("select school_code FROM schools;")
-        cd_List = cur.executemany("select code FROM schools;")
+        sclcd_List = cur.execute("select code FROM schools;").fetchall()
 
-        if  school_code in sclcd_List and code in cd_List:
-            schl_id =  cur.execute("select id from schools where code = ?;", code)
-            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and student.school = ?;", schl_id)
+        print(sclcd_List)
+
+        if  school_code in sclcd_List[0] and code == "978659":
+            schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
+            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and students.school = ?;", schl_id)
             lst = res.fetchall()
             con.close()
             return render_template("matches.html", matches_list=lst)
