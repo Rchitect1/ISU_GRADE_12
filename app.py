@@ -42,7 +42,16 @@ def remove_s(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
     cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+
+    tutor = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM tutors WHERE match IS ?;", student_id)
+
+    with open("priorityList.txt","w+") as file: #write tutor info to file      
+        file.write(" ".join(tutor))
+
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
+    
+    
+
     con.commit()
     con.close()
     return redirect("/matches")
@@ -51,8 +60,12 @@ def remove_s(student_id):
 def remove_t(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
+
     cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
     cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
+
+
+
     con.commit()
     con.close()
     return redirect("/matches")
@@ -164,6 +177,22 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-# def doMatchmaking():
-#     return null
+def match(student, tutor): #takes 2 arrays
+    conn = sqlite3.connect("records.db")
+    c = conn.cursor()
+    match = True
 
+    with open("noMatches.txt", "r") as file:
+        for line in file:
+            if(line.strip() == (student + tutor).strip()): #if student and tutor got removed previously
+                match = False
+
+
+    if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
+        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+    
+    conn.commit()
+    conn.close()
+
+    return match
