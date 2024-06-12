@@ -30,7 +30,7 @@ def matches():
 
         if  school_code in new_lst and code == "978659":
             schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
-            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and students.school = ?;", schl_id).fetcll()
+            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
             con.close()
             return render_template("matches.html", matches_list=res)
         else:
