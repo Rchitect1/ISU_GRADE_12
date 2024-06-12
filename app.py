@@ -104,7 +104,7 @@ def remove_m(student_id):
 
     #make sure they wont be matched again
     file = open("noMatches.txt.txt", "w") 
-    file.write(" ".join(student)) #student first
+    file.write(" ".join(student)) #student always first
     file.write(" ".join(tutor))
     file.close()
 
@@ -114,7 +114,7 @@ def remove_m(student_id):
             match(student, t) #pair up 
             tMatch = True
 
-    for s in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
+    for s in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM students WHERE match IS NULL ORDER BY id;").fetchall():
         if not (sMatch):
             match(s, tutor) #pair up 
             sMatch = True
