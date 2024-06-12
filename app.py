@@ -45,6 +45,7 @@ def remove_s(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
     cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+    cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
     con.commit()
     con.close()
     return redirect("/matches")
@@ -54,6 +55,7 @@ def remove_t(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
     cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
+    cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
     con.commit()
     con.close()
     return redirect("/matches")
@@ -103,22 +105,8 @@ def submit_tutor_form():
     period = request.form["period"]
     subject = request.form["subject"]
     
-    lastLetter = subject[len(subject)-2] # second last letter
-    if (lastLetter == 'U'):
-        type = "University"
-    elif (lastLetter == 'C'):
-        type = "College"
-    elif (lastLetter == 'O'):
-        type = "Open"
-    elif (lastLetter == 'M'):
-        type = "College/Univesity"
+    type = subject[len(subject)-1] # second last letter
 
-    lastLetter = subject[len(subject)-1] # actual last letter
-    if (lastLetter == 'G'):
-        type += " (Gifted)"
-    elif (lastLetter == 'E'):
-        type += " (Enriched)"
-        
     matchMacking([name, grade, subject, type, period, phone, email, school], "Tutor")
 
     return redirect("/thank")
@@ -135,21 +123,7 @@ def submit_student_form():
     subject = request.form["subject"]
     type = None
     
-    lastLetter = subject[len(subject)-2] # second last letter
-    if (lastLetter == 'U'):
-        type = "University"
-    elif (lastLetter == 'C'):
-        type = "College"
-    elif (lastLetter == 'O'):
-        type = "Open"
-    elif (lastLetter == 'M'):
-        type = "College/Univesity"
-
-    lastLetter = subject[len(subject)-1] # actual last letter
-    if (lastLetter == 'G'):
-        type += " (Gifted)"
-    elif (lastLetter == 'E'):
-        type += " (Enriched)"
+    type = subject[len(subject)-1] # second last letter
         
     matchMacking([name, grade, subject, type, period, phone, email, school], "Student")
 
@@ -170,22 +144,22 @@ def matchMacking(data, form):
     school = data[7]
 
     if(form == "Student"): # if form is student
-        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] > grade and row[3] == subject and row[5] == period ): #if grade bigger, same subject and period
+        for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know         
+            if(row[2] > int(grade) and row[3] == subject and row[5] == period and int(row[4]) >= int(type) and row[9] == school): #if grade bigger, same subject and period
                 if (match == None):
                     match = row[0] #student match = tutor ID
 
         insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
-        c.executemany("INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
+        c.execute("INSERT INTO students(name, grade, subject, type, period, phone, email, match, school) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
         
     if(form == "Tutor"): # if form is tutor
-        for row in c.executemany("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors ORDER BY id WHERE match == NULL"): #if no match value, might be null? i dont know         
-            if(row[2] < grade and row[3] == subject and row[5] == period ): #if grade smaller, same subject and period
+        for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know         
+            if(row[2] < int(grade) and row[3] == subject and row[5] == period and int(row[4]) <= int(type) and row[9] == school): #if grade smaller, same subject and period
                 if (match == None):
                     match = row[0] #tutor match = student ID
 
         insert = [name, grade, subject, type, period, phone, email, match, school] #i need to find out how to do course type, its missing from here
-        c.executemany("INSERT INTO tutors VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
+        c.execute("INSERT INTO tutors(name, grade, subject, type, period, phone, email, match, school) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", insert)
                     
     conn.commit()
     conn.close()
