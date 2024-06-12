@@ -40,11 +40,25 @@ def matches():
         return redirect("/login")
 
 @app.route("/remove_s/<student_id>")
-def remove_s(student_id):
+
+def remove_s(student_id): #remove student
     con = sqlite3.connect("records.db")
     cur = con.cursor()
+    #DELETE the student
     cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+
+    matched = False
+    tutor = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM tutors WHERE match IS ?;", student_id)
+
+    #remove tutor match
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
+    
+    #re-match tutor
+    for student in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM students WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (matched):
+            match(student, tutor) #pair up 
+            matched = True
+
     con.commit()
     con.close()
 
@@ -52,11 +66,24 @@ def remove_s(student_id):
     return redirect("/login")
 
 @app.route("/remove_t/<student_id>")
-def remove_t(student_id):
+def remove_t(student_id): #remove tutor
     con = sqlite3.connect("records.db")
     cur = con.cursor()
+    #DELETE the tutor
     cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
-    cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
+
+    matched = False
+    student = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM students WHERE match IS ?;", student_id)
+
+    #remove student match
+    cur.execute("UPDATE students SET match = NULL WHERE match = ?;", student_id)
+    
+    #re-match student
+    for tutor in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (matched):
+            match(student, tutor) #pair up 
+            matched = True
+
     con.commit()
     con.close()
     #matchMaking(data)
@@ -66,8 +93,33 @@ def remove_t(student_id):
 def remove_m(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
+    sMatch = False
+    tMatch = True
+    student = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM students WHERE match IS ?;", student_id)
+    tutor = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM tutors WHERE match IS ?;", student_id)
+
+    #empty match
     cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
+
+    #make sure they wont be matched again
+    file = open("noMatches.txt.txt", "w") 
+    file.write(" ".join(student)) #student always first
+    file.write(" ".join(tutor))
+    file.close()
+
+    #re-match
+    for t in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (tMatch):
+            match(student, t) #pair up 
+            tMatch = True
+
+    for s in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM students WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (sMatch):
+            match(s, tutor) #pair up 
+            sMatch = True
+    
+    #close
     con.commit()
     con.close()
     #matchMaking(data)
@@ -187,6 +239,22 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-# def doMatchmaking():
-#     return null
+def match(student, tutor): #takes 2 arrays
 
+    conn = sqlite3.connect("records.db")
+    c = conn.cursor()
+    match = True
+
+    #read from the forbidden matches file
+    with open("noMatches.txt", "r") as file:
+        for line in file:
+            if(line.strip() == (student + tutor).strip()): #if student and tutor got removed previously (all squished to one string)
+                match = False
+
+    #pair up student and tutor (if eligable)
+    if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
+        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+    
+    conn.commit()
+    conn.close()
