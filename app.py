@@ -30,7 +30,7 @@ def matches():
 
         if  school_code in new_lst and code == "978659":
             schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
-            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
+            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors, schools where students.id = tutors.match and students.school = ?;", schl_id).fetcll()
             con.close()
             return render_template("matches.html", matches_list=res)
         else:
@@ -64,6 +64,9 @@ def remove_s(student_id): #remove student
 
     #matchMaking(data)
     return redirect("/login")
+
+
+
 
 @app.route("/remove_t/<student_id>")
 def remove_t(student_id): #remove tutor
@@ -253,8 +256,22 @@ def match(student, tutor): #takes 2 arrays
 
     #pair up student and tutor (if eligable)
     if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
-        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
-        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+       
+       
+        if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
+            if (student[3][1] == tutor[3][1]):
+                c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+
+        elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
+            if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
+                c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+
+            elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
+                if ((student[3][-1]) <= student[3][-1]): #checks last letter (c/U)
+                c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
     
     conn.commit()
     conn.close()
