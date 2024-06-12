@@ -255,21 +255,21 @@ def match(student, tutor): #takes 2 arrays
                 match = False
 
     #pair up student and tutor (if eligable)
-    if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
+    #if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
        
        
-        if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
-            if (student[3][1] == tutor[3][1]):
+    if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
+        if (student[3][1] == tutor[3][1]):
+            c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+
+    elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
+        if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
                 c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
                 c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
 
-        elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
-            if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
-                c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
-                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
-
-            elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
-                if ((student[3][-1]) <= student[3][-1]): #checks last letter (c/U)
+        elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
+            if ((student[3][-1]) <= student[3][-1]): #checks last letter (c/U)
                 c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
                 c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
     
