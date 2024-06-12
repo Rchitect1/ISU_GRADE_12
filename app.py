@@ -64,6 +64,9 @@ def remove_s(student_id): #remove student
     con.close()
     return redirect("/login")
 
+
+
+
 @app.route("/remove_t/<student_id>")
 def remove_t(student_id): #remove tutor
     con = sqlite3.connect("records.db")
@@ -235,15 +238,17 @@ def matchAvailable(student, tutor): #takes 2 arrays
     c = conn.cursor()
 
     #read from the forbidden matches file
-    if not (student[1]+student[3]+student[7]+f"{student[9]}" in tutor[10]):
-        if not (tutor[1]+tutor[3]+tutor[7]+f"{tutor[9]}" in student[10]):
-        #pair up student and tutor (if eligable)
-            print(student,tutor)
-            if(student[2] <= tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and student[9] == tutor[9]): #if grade smaller, same subject and period
-                c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
-                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
-                conn.commit()
+    with open("noMatches.txt", "r") as file:
+        for line in file:
+            if(line.strip() == (student + tutor).strip()): #if student and tutor got removed previously (all squished to one string)
+                match = False
 
+    #pair up student and tutor (if eligable)
+    if(match and student[2] < tutor[2] and student[3] == tutor[3] and student[5] == tutor[5] and int(student[4]) <= int(tutor[4]) and student[9] == tutor[9]): #if grade smaller, same subject and period
+        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
+        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+    
+    conn.commit()
     conn.close()
     
     
