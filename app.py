@@ -40,10 +40,12 @@ def matches():
         return redirect("/login")
 
 @app.route("/remove_s/<student_id>")
-def remove_s(student_id):
+
+def remove_s(student_id): #remove student
     con = sqlite3.connect("records.db")
     cur = con.cursor()
     cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+    matched = False
 
     tutor = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM tutors WHERE match IS ?;", student_id)
 
@@ -52,7 +54,9 @@ def remove_s(student_id):
 
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
     
-    
+    for student in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM students WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (matched):
+            match(student, tutor) #pair up 
 
     con.commit()
     con.close()
@@ -61,14 +65,23 @@ def remove_s(student_id):
     return redirect("/login")
 
 @app.route("/remove_t/<student_id>")
-def remove_t(student_id):
+def remove_t(student_id): #remove tutor
     con = sqlite3.connect("records.db")
     cur = con.cursor()
 
     cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
-    cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
+    matched = False
 
+    student = cur.execute("id, name, grade, subject, type, period, phone, email, school FROM students WHERE match IS ?;", student_id)
 
+    with open("priorityList.txt","w+") as file: #write tutor info to file      
+        file.write(" ".join(student))
+
+    cur.execute("UPDATE students SET match = NULL WHERE match = ?;", student_id)
+    
+    for tutor in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
+        if not (matched):
+            match(student, tutor) #pair up 
 
     con.commit()
     con.close()
@@ -201,6 +214,7 @@ if __name__ == "__main__":
 
 
 def match(student, tutor): #takes 2 arrays
+
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
     match = True
