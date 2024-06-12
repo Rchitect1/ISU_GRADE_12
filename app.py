@@ -44,7 +44,6 @@ def remove_s(student_id): #remove student
     con = sqlite3.connect("records.db")
     cur = con.cursor()
 
-    matched = False
     tutor = cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match = ?;", student_id).fetchone()
     crossed_student = cur.execute("SELECT name, subject, email, school, crossed FROM students WHERE id = ?;", student_id).fetchone()
     crossed = tutor[10]+crossed_student[0]+crossed_student[1]+crossed_student[2]+f"{crossed_student[3]}"
@@ -69,7 +68,6 @@ def remove_t(student_id): #remove tutor
     con = sqlite3.connect("records.db")
     cur = con.cursor()
 
-    matched = False
     student = cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM students WHERE id = ?;", student_id).fetchone()
     crossed_tutor = cur.execute("SELECT name, subject, email, school, crossed FROM tutors WHERE id = ?;", student_id).fetchone()
     crossed = student[10]+crossed_tutor[0]+crossed_tutor[1]+crossed_tutor[2]+f"{crossed_tutor[3]}"
@@ -92,8 +90,7 @@ def remove_t(student_id): #remove tutor
 def remove_m(student_id):
     con = sqlite3.connect("records.db")
     cur = con.cursor()
-    sMatch = False
-    tMatch = False
+
     student = cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM students WHERE id = ?;", student_id).fetchone()
     tutor = cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS ?;", student_id).fetchone()
     crossed_student = tutor[10]+student[1]+student[3]+student[7]+f"{student[9]}"
