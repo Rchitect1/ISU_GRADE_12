@@ -47,6 +47,8 @@ def remove_s(student_id):
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
     con.commit()
     con.close()
+
+    #matchMaking(data)
     return redirect("/login")
 
 @app.route("/remove_t/<student_id>")
@@ -57,7 +59,8 @@ def remove_t(student_id):
     cur.execute("UPDATE students SET match = NULL WHERE id = ?;", student_id)
     con.commit()
     con.close()
-    return redirect(url_for("/login"))
+    #matchMaking(data)
+    return redirect("/login")
 
 @app.route("/remove_m/<student_id>")
 def remove_m(student_id):
@@ -67,6 +70,7 @@ def remove_m(student_id):
     cur.execute("UPDATE tutors SET match = NULL WHERE match = ?;", student_id)
     con.commit()
     con.close()
+    #matchMaking(data)
     return redirect("/login")
 
 @app.route("/login")
