@@ -199,9 +199,20 @@ def matchMacking(data, form):
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know  
             if not (row[1]+row[3]+row[7]+f"{row[9]}" in crossed):
                 if not (name+subject+email+f"{schl_id}" in row[10]):        
-                    if(row[2] >= int(grade) and row[3] == subject and row[5] == period and row[9] == schl_id): #if grade bigger, same subject and period
-                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (st_id, row[0]))
-                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (row[0], st_id))
+                    if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
+                        if (row[3][1] == subject[1]):
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
+
+                    elif (row[3][0] == subject[0]): #checks first letter (subject)
+                        if (int(row[3][-2]) > int (subject[-2])): #checks second last letter (grade)
+                                c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
+
+                        elif(int(row[3][-2]) == int (subject[-2])): #checks second last latter (grade)
+                            if ((row[3][-1]) >= subject[-1]): #checks last letter (c/U)
+                                c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id)) 
                 
 
         
@@ -219,9 +230,20 @@ def matchMacking(data, form):
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM students WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know      
             if not (row[1]+row[3]+row[7]+f"{row[9]}" in crossed):
                 if not (name+subject+email+f"{schl_id}" in row[10]):   
-                    if(row[2] <= int(grade) and row[3] == subject and row[5] == period and row[9] == schl_id): #if grade smaller, same subject and period
-                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
-                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
+                    if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
+                        if (row[3][1] == subject[1]):
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
+                            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
+
+                    elif (row[3][0] == subject[0]): #checks first letter (subject)
+                        if (int(row[3][-2]) < int (subject[-2])): #checks second last letter (grade)
+                                c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
+                                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
+
+                        elif(int(row[3][-2]) == int (subject[-2])): #checks second last latter (grade)
+                            if ((row[3][-1]) <= subject[-1]): #checks last letter (c/U)
+                                c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
+                                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))  
 
     conn.commit()
     conn.close()
@@ -237,20 +259,20 @@ def matchAvailable(student, tutor): #takes 2 arrays
         #pair up student and tutor (if eligable)
             if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
                 if (student[3][1] == tutor[3][1]):
-                    c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
-                    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+                    c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
 
             elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
                 if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
-                        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
-                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])
+                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
 
                 elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
-                    if ((student[3][-1]) <= student[3][-1]): #checks last letter (c/U)
-                        c.execute("UPDATE students SET match = ? WHERE id = ?;", [tutor[0], student[0]])
-                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", [student[0], tutor[0]])          
-                conn.commit()
-
+                    if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
+                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
+                
+    conn.commit()
     conn.close()
     
     
