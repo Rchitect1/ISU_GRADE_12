@@ -200,21 +200,26 @@ def matchMacking(data, form):
             if not (row[1]+row[3]+row[7]+f"{row[9]}" in crossed):
                 if not (name+subject+email+f"{schl_id}" in row[10]):   
                     if (schl_id == row[9]):
-                        if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
-                            if (row[3][1] == subject[1]):
-                                c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
-                                c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
-
-                        elif (row[3][0] == subject[0]): #checks first letter (subject)
-                            if (int(row[3][-2]) > int (subject[-2])): #checks second last letter (grade)
+                        if (row[5] == period):
+                            if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
+                                if(subject[0] == 'S' and row[3][0] == 'S'):
+                                    if ((int (subject[-2]) <= 2 and int (row[3][-2]) >=2 ) or (int ((subject[-2])) == 1 and int (row[3][-2]) == 1)):
+                                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
+                                elif (row[3][1] == subject[1]):
                                     c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
                                     c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
 
-                            elif(int(row[3][-2]) == int (subject[-2])): #checks second last latter (grade)
-                                if ((row[3][-1]) >= subject[-1]): #checks last letter (c/U)
-                                    c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
-                                    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id)) 
-                
+                            elif (row[3][0] == subject[0]): #checks first letter (subject)
+                                if (int(row[3][-2]) > int (subject[-2])): #checks second last letter (grade)
+                                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id))
+
+                                elif(int(row[3][-2]) == int (subject[-2])): #checks second last latter (grade)
+                                    if ((row[3][-1]) >= subject[-1]): #checks last letter (c/U)
+                                        c.execute("UPDATE students SET match = ? WHERE id = ?;", (st_id, row[0]))
+                                        c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], st_id)) 
+                    
 
         
         
@@ -234,7 +239,11 @@ def matchMacking(data, form):
                     if (schl_id == row[9]): 
                           if (row[5] == period):
                                 if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
-                                    if (row[3][1] == subject[1]):
+                                    if(row[3][0] == 'S' and subject[0] == 'S'):
+                                        if ((int (row [3][-2]) <= 2 and int (subject[-2]) >=2 ) or (int ((row [3][-2])) == 1 and int (subject[-2]) == 1)):
+                                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
+                                            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
+                                    elif (row[3][1] == subject[1]):
                                         c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
                                         c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
 
@@ -263,7 +272,6 @@ def matchAvailable(student, tutor): #takes 2 arrays
             if (student[9] == tutor[9]):
                 if (student[5] == tutor[5]):
                     if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
-
                         if(student[3][0] == 'S' and tutor[3][0] == 'S'):
                             if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
                                 c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
