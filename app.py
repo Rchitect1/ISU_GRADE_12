@@ -283,6 +283,10 @@ def matchAvailable(student, tutor): #takes 2 arrays
                         if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
+                    elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
+                        if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
                 
     conn.commit()
     conn.close()
