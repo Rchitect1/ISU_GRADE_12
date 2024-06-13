@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_session import Session
 import sqlite3
 from bs4 import BeautifulSoup
+import hashlib
 
 app = Flask(__name__)
 
@@ -38,13 +39,15 @@ def matches():
         school_code = session["school-code"]
         code = session["code"]
 
+        hashed = hashlib.md5(school_code.encode()).hexdigest()
+
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
         for i in range(len(sclcd_List)):
             new_lst.append(sclcd_List[i][0])
 
-        if  school_code in new_lst and code == "220244":
-            schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
+        if  hashed in new_lst and code == "220244":
+            schl_id =  cur.execute("select id from schools where code = ?;", (hashed,)).fetchone()
             res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
             con.close()
             return render_template("matches.html", matches_list=res)
