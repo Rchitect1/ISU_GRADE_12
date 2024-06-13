@@ -16,6 +16,7 @@ def index():
 @app.route("/signout")
 def signout():
     session["school-code"] = None
+    session["code"] = None
     return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
