@@ -260,7 +260,7 @@ def matchAvailable(student, tutor): #takes 2 arrays
         if not (tutor[1]+tutor[3]+tutor[7]+f"{tutor[9]}" in student[10]):
         #pair up student and tutor (if eligable)
             if (student[9] == tutor[9]):
-                if (student[5] == tutor[5])
+                if (student[5] == tutor[5]):
                     if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
 
                         if(student[3][0] == 'S' and tutor[3][0] == 'S'):
@@ -279,7 +279,7 @@ def matchAvailable(student, tutor): #takes 2 arrays
 
                     elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
                         if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
-                            .execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
                 
     conn.commit()
