@@ -13,14 +13,29 @@ Session(app)
 def index():
     return render_template("index.html")
 
-@app.route("/matches", methods=["POST"])
-def matches():
-    if request.method == "POST":   
+@app.route("/signout")
+def signout():
+    session["school-code"] = None
+    return redirect("/")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+            session["school-code"] = request.form.get("school-code")
+            session["code"] = request.form.get("code")
+            return redirect("/matches")
+    return render_template("login.html")
+
+@app.route("/matches")
+def matches():  
+        if not session.get("school-code"):
+            return redirect("/login")
+
         con = sqlite3.connect("records.db")
         cur = con.cursor()
 
-        school_code = request.form["school-code"]
-        code = request.form["code"]
+        school_code = session["school-code"]
+        code = session["code"]
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
@@ -35,11 +50,8 @@ def matches():
         else:
             con.close()
             return redirect(url_for("login", showModal='true', message="Invalid code"))
-    else:
-        return redirect("/login")
 
 @app.route("/remove_s/<student_id>")
-
 def remove_s(student_id): #remove student
     con = sqlite3.connect("records.db")
     cur = con.cursor()
@@ -61,7 +73,7 @@ def remove_s(student_id): #remove student
 
     
     con.close()
-    return redirect("/login")
+    return redirect("/matches")
 
 @app.route("/remove_t/<student_id>")
 def remove_t(student_id): #remove tutor
@@ -84,7 +96,7 @@ def remove_t(student_id): #remove tutor
         matchAvailable(student, tutor) #pair up 
 
     con.close()
-    return redirect("/login")
+    return redirect("/matches")
 
 @app.route("/remove_m/<student_id>")
 def remove_m(student_id):
@@ -110,11 +122,7 @@ def remove_m(student_id):
     
     #close
     con.close()
-    return redirect("/login")
-
-@app.route("/login")
-def login():
-    return render_template("login.html")
+    return redirect("/matches")
 
 @app.route("/signup")
 def signup():
@@ -131,10 +139,6 @@ def tutor_form():
 @app.route("/thank")
 def thank():
     return render_template("thank.html")
-
-@app.route("/signout")
-def signout():
-    return render_template("index.html")
 
 @app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
