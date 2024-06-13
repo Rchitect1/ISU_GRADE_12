@@ -261,7 +261,12 @@ def matchAvailable(student, tutor): #takes 2 arrays
         #pair up student and tutor (if eligable)
             if (student[9] == tutor[9]):
                 if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
-                    if (student[3][1] == tutor[3][1]):
+                    if(student[3][0] == 'S' and tutor[3][0] == 'S'):
+                        if (int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ):
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                            c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
+
+                    elif (student[3][1] == tutor[3][1]):
                         c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                         c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
 
