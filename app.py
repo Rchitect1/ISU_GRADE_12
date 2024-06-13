@@ -261,7 +261,7 @@ def matchAvailable(student, tutor): #takes 2 arrays
         if not (tutor[1]+tutor[3]+tutor[7]+f"{tutor[9]}" in student[10]):
         #pair up student and tutor (if eligable)
             if (student[9] == tutor[9]):
-                if (student[5] == tutor[5])
+                if (student[5] == tutor[5]):
                     if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
 
                         if(student[3][0] == 'S' and tutor[3][0] == 'S'):
