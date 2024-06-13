@@ -232,7 +232,7 @@ def matchMacking(data, form):
             if not (row[1]+row[3]+row[7]+f"{row[9]}" in crossed):
                 if not (name+subject+email+f"{schl_id}" in row[10]):
                     if (schl_id == row[9]): 
-                          if (student[5] == tutor[5]):
+                          if (row[5] == period):
                                 if ((row[3][0] == 'S' and subject[0] == 'S') or (row[3][0] == 'C' and subject[0] == 'C')): #checks first letter (subject))
                                     if (row[3][1] == subject[1]):
                                         c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
@@ -280,7 +280,7 @@ def matchAvailable(student, tutor): #takes 2 arrays
 
                     elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
                         if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
-                            .execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+                            c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
                 
     conn.commit()
