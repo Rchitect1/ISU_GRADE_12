@@ -381,8 +381,8 @@ p1.slide-left.delay {
 
     nav ul li .close-btn {
         position: absolute;
-        top: -435px;
-        right: 18px;
+        top: -25px;
+        right: 250px;
         display: block;
     }
 
