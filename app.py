@@ -263,7 +263,7 @@ def matchAvailable(student, tutor): #takes 2 arrays
                 if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
 
                     if(student[3][0] == 'S' and tutor[3][0] == 'S'):
-                        if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1):
+                        if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
 
