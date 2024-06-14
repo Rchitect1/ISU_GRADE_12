@@ -41,7 +41,7 @@ def matches():
         school_code = session["school-code"]
         code = session["code"]
 
-        hashed = hashlib.md5(school_codgite.encode()).hexdigest()
+        hashed = hashlib.md5(school_code.encode()).hexdigest()
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
@@ -291,7 +291,7 @@ def sendEmail(email, body):
     msg["From"] = sender
     msg["To"] = ', '.join(recepients)
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+    with smtplib.SMTP_SSL('smtp.gmail.com', 587) as smtp_server:
         smtp_server.login(sender, 'peertutor123!@#')
         smtp_server.sendmail(sender, recepients, msg.as_string())
 
