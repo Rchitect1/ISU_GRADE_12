@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_session import Session
 import sqlite3
 from bs4 import BeautifulSoup
+import hashlib
 
 app = Flask(__name__)
 
@@ -13,33 +14,48 @@ Session(app)
 def index():
     return render_template("index.html")
 
-@app.route("/matches", methods=["POST"])
-def matches():
-    if request.method == "POST":   
+@app.route("/signout")
+def signout():
+    session["school-code"] = None
+    session["code"] = None
+    return redirect("/")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+            session["school-code"] = request.form.get("school-code")
+            session["code"] = request.form.get("code")
+            return redirect("/matches")
+    return render_template("login.html")
+
+@app.route("/matches")
+def matches():  
+        if not session.get("school-code"):
+            return redirect("/login")
+
         con = sqlite3.connect("records.db")
         cur = con.cursor()
 
-        school_code = request.form["school-code"]
-        code = request.form["code"]
+        school_code = session["school-code"]
+        code = session["code"]
+
+        hashed = hashlib.md5(school_code.encode()).hexdigest()
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
         for i in range(len(sclcd_List)):
             new_lst.append(sclcd_List[i][0])
 
-        if  school_code in new_lst and code == "220244":
-            schl_id =  cur.execute("select id from schools where code = ?;", (school_code,)).fetchone()
+        if  hashed in new_lst and code == "220244":
+            schl_id =  cur.execute("select id from schools where code = ?;", (hashed,)).fetchone()
             res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
             con.close()
             return render_template("matches.html", matches_list=res)
         else:
             con.close()
             return redirect(url_for("login", showModal='true', message="Invalid code"))
-    else:
-        return redirect("/login")
 
 @app.route("/remove_s/<student_id>")
-
 def remove_s(student_id): #remove student
     con = sqlite3.connect("records.db")
     cur = con.cursor()
@@ -61,7 +77,7 @@ def remove_s(student_id): #remove student
 
     
     con.close()
-    return redirect("/login")
+    return redirect("/matches")
 
 @app.route("/remove_t/<student_id>")
 def remove_t(student_id): #remove tutor
@@ -84,7 +100,7 @@ def remove_t(student_id): #remove tutor
         matchAvailable(student, tutor) #pair up 
 
     con.close()
-    return redirect("/login")
+    return redirect("/matches")
 
 @app.route("/remove_m/<student_id>")
 def remove_m(student_id):
@@ -110,11 +126,7 @@ def remove_m(student_id):
     
     #close
     con.close()
-    return redirect("/login")
-
-@app.route("/login")
-def login():
-    return render_template("login.html")
+    return redirect("/matches")
 
 @app.route("/signup")
 def signup():
@@ -131,10 +143,6 @@ def tutor_form():
 @app.route("/thank")
 def thank():
     return render_template("thank.html")
-
-@app.route("/signout")
-def signout():
-    return render_template("index.html")
 
 @app.route("/submit_tutor_form", methods=["POST"])
 def submit_tutor_form():
