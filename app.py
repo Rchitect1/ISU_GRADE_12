@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_session import Session
 import sqlite3
 import smtplib
-from envs import APP_PASSWORD
 from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 import hashlib
@@ -42,7 +41,7 @@ def matches():
         school_code = session["school-code"]
         code = session["code"]
 
-        hashed = hashlib.md5(school_code.encode()).hexdigest()
+        hashed = hashlib.md5(school_codgite.encode()).hexdigest()
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
