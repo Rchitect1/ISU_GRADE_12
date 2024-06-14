@@ -291,7 +291,7 @@ def sendEmail(email, body):
     msg["From"] = sender
     msg["To"] = ', '.join(recepients)
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 587) as smtp_server:
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
         smtp_server.login(sender, 'peertutor123!@#')
         smtp_server.sendmail(sender, recepients, msg.as_string())
 
