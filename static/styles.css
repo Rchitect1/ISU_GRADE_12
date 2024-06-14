@@ -141,9 +141,8 @@ p1 {
 }
 
 .content p {
-    position: absolute;
-    top: 46.5%;
-    left: 9.5%;
+    position:relative; 
+    margin-top: 2%; 
     font-size: 25px;
     max-width: 500px;
     line-height: 28px;
@@ -192,7 +191,7 @@ p1 {
     display: inline-block;
 }
 
-.btn {
+.content .btn {
     position: relative;
     top: 120%;
     border: 2px solid #fff;
@@ -304,10 +303,6 @@ p1.slide-left.delay {
     font-weight: 50;
 }
 
-/* Responsive Styles */
-@media (max-width: 1200px) {
-
-}
 
 @media (max-width: 992px) {
 
@@ -330,12 +325,10 @@ p1.slide-left.delay {
         font-size: 50px;
     }
     .content p{
-        margin-top: -7.5%;
-        font-size: 25px; 
+        margin-top: 5%; 
     }
     .content p1 {
-        margin-top: -5%;
-        font-size: 15px;
+        margin-top: 2%; 
     }
 
     .content .links{
@@ -346,9 +339,7 @@ p1.slide-left.delay {
 
 @media (max-width: 768px) {
 
-    .matches{
-        
-    }
+
 
       nav {
         position: absolute;
@@ -473,8 +464,7 @@ p1.slide-left.delay {
     }
 
     .content p{
-        margin-top: -15%;
-        font-size: 25px; 
+        margin-top: 5%;
     }
     .content p1 {
         margin-top: -10%;
@@ -538,11 +528,6 @@ p1.slide-left.delay {
         
     }
 
-    .content p{
-        margin-top: -20%;
-        font-size: 25px;
-       
-    }
     .content p1 {
         margin-top: -15%;
         font-size: 15px;
@@ -585,7 +570,6 @@ p1.slide-left.delay {
 
     .content p{
         text-align: center;
-        margin-top: -40%;
         font-size: 17px;
         margin-right: 7%;
        
@@ -630,7 +614,6 @@ p1.slide-left.delay {
 
     .content p{
         text-align: center;
-        margin-top: -27%;
         font-size: 17px;
         margin-right: 7%;
        
