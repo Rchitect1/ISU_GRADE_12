@@ -41,7 +41,7 @@ def matches():
         school_code = session["school-code"]
         code = session["code"]
 
-        hashed = hashlib.md5(school_codgite.encode()).hexdigest()
+        hashed = hashlib.md5(school_code.encode()).hexdigest()
 
         sclcd_List = cur.execute("select code FROM schools;").fetchall()
         new_lst = []
@@ -205,10 +205,9 @@ def matchMacking(data, form):
         conn = sqlite3.connect("records.db")
         c = conn.cursor()
         st_id = c.execute("SELECT MAX(id) from students;").fetchone()[0]
-        student_data = [st_id, name, int(grade), subject, type, period, phone, email, match, int(schl_id), crossed]
         row = None
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know  
-            matchAvailable(student_data, row)
+            matchAvailable(data, row)
                            
     if(form == "Tutor"): # if form is tutor
         insert = [name, grade, subject, type, period, phone, email, match, int(schl_id), crossed] #i need to find out how to do course type, its missing from here
@@ -219,10 +218,9 @@ def matchMacking(data, form):
         conn = sqlite3.connect("records.db")
         c = conn.cursor()
         tr_id = c.execute("SELECT MAX(id) from tutors;").fetchone()[0]
-        tutor_data = [tr_id, name, int(grade), subject, type, period, phone, email, match, int(schl_id), crossed]
         row = None
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM students WHERE match IS NULL ORDER BY id;").fetchall(): #if no match value, might be null? i dont know      
-            matchAvailable(row, tutor_data) 
+            matchAvailable(row, data) 
 
     conn.commit()
     conn.close()
@@ -231,69 +229,54 @@ def matchAvailable(student, tutor): #takes 2 arrays
 
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
-    print(student, tutor)
 
     #read from the forbidden matches file
     if not (student[1]+student[3]+student[7]+f"{student[9]}" in tutor[10]):
-        print(-1)
         if not (tutor[1]+tutor[3]+tutor[7]+f"{tutor[9]}" in student[10]):
-            print(0)
         #pair up student and tutor (if eligable)
             if (student[9] == tutor[9]):
-                print(1)
                 if (student[5] == tutor[5]):
-                    print(2)
                     if ((student[3][0] == 'S' and tutor[3][0] == 'S') or (student[3][0] == 'C' and tutor[3][0] == 'C')): #checks first letter (subject))
-                        print(3)
                         if(student[3][0] == 'S' and tutor[3][0] == 'S'):
                             if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
-                                 print(4)
                                  match(student, tutor)
                         
                         elif (student[3][1] == tutor[3][1]):
-                             print(5)
                              match(student, tutor)
 
                     elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
-                        print(6)
-                        if (int(student[3][-2]) <= int (tutor[3][-2])): #checks second last letter (grade)
-                            print(7)
+                        if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
                             match(student, tutor)
                             
                     elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
-                        print(8)
                         if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
-                            print(9)
                             match(student, tutor)
                             
     conn.commit()
     conn.close()
 
 def match(student, tutor): #STUDENT HAS TO BE FIRST
-    print(10)
     
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
     c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
-    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))  
-    conn.commit()
-    conn.close()        
+    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
     sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
     sendEmail(tutor[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+    conn.commit()
+    conn.close()
 
 def sendEmail(email, body):
 
-    subject = "Peer Tutor Matching"
     sender = 'peertutor.noreply@gmail.com'
-    recepients = [sender, email]
     msg = MIMEText(body)
-    msg["Subject"] = subject
+    msg["Subject"] = 'Email Subject'
     msg["From"] = sender
-    msg["To"] = ', '.join(recepients)
+    msg["To"] = ', '.join([sender, email])
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-        smtp_server.login(sender, 'peertutor123!@#')
-        smtp_server.sendmail(sender, recepients, msg.as_string())
+    with smtplib.STMP_SSL('smtp.gmail.com', 465) as smtp_server:
+        smtp_server.login(sender, APP_PASSWORD)
+        smtp_server.sendmail(sender, [sender, email], msg.as_string())
 
 
 if __name__ == "__main__":
