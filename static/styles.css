@@ -7,6 +7,7 @@
 
 body {
     width: 100%;
+    overflow: auto;
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('image/Tutoring.jpg');
     background-position: center top;
     background-size: cover;
@@ -306,17 +307,6 @@ p1.slide-left.delay {
 /* Responsive Styles */
 @media (max-width: 1200px) {
 
-    .content{
-        margin-top: -10%;
-        margin-left: 9%;
-        margin-right: 9%;
-        color: #fff;
-    }
-    .content h1 {
-        font-size: 125px;
-        line-height: 100px;
-        margin-top: 25%; 
-    }
 }
 
 @media (max-width: 992px) {
@@ -355,6 +345,10 @@ p1.slide-left.delay {
 }
 
 @media (max-width: 768px) {
+
+    .matches{
+        
+    }
 
       nav {
         position: absolute;
@@ -419,6 +413,48 @@ p1.slide-left.delay {
     nav ul li:hover::after {
         width: 0%;
     }
+
+    .matches .list-group-item {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .matches .list-group-item .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .matches .list-group-item .row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+
+    .matches .list-group-item .row .col {
+        flex: 1;
+        text-align: center;
+    }
+
+    .matches .list-group-item .row .col:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .matches .list-group-item .row .col button {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+
+    .matches .list-group-item.list-group-item-dark .row .col {
+        text-align: center;
+        font-weight: bold;
+    }
+
     
     
 
@@ -465,6 +501,29 @@ p1.slide-left.delay {
 
 
 @media (max-width: 576px) {
+
+    .footer p{
+        font-size: 12.5px;
+        top: 97.9%
+    }
+
+    .stuform {
+        overflow: scroll; ;
+        background: #fff;
+        top: 57.5%; 
+        padding: 20px;
+        border-radius: 8px;
+        max-height: 80%; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 200px;
+    }
+
+    .form-group label {
+    display: inline-flex;
+    margin-bottom: 5px;
+    font-size: 12.5px;
+    font-weight: 1;
+}
     
     .content {
         margin: 10%;
