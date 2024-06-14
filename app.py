@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_session import Session
 import sqlite3
+import smtplib
+from envs import APP_PASSWORD
 from bs4 import BeautifulSoup
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
@@ -248,6 +251,7 @@ def matchMacking(data, form):
                                         if ((int (row [3][-2]) <= 2 and int (subject[-2]) >=2 ) or (int ((row [3][-2])) == 1 and int (subject[-2]) == 1)):
                                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
                                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
+
                                     elif (row[3][1] == subject[1]):
                                         c.execute("UPDATE students SET match = ? WHERE id = ?;", (tr_id, row[0]))
                                         c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (row[0], tr_id))
@@ -281,25 +285,56 @@ def matchAvailable(student, tutor): #takes 2 arrays
                             if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
                                 c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                                 c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
-
+                                sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+                                sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+                        
                         elif (student[3][1] == tutor[3][1]):
                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
 
                     elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
                         if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))
-
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+                            
                     elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
                         if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
                             c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
                             c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
-                
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+                            sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+                            
     conn.commit()
     conn.close()
+
+def match(student, tutor):
     
-    
+    conn = sqlite3.connect("records.db")
+    c = conn.cursor()
+    c.execute("UPDATE students SET match = ? WHERE id = ?;", (tutor[0], student[0]))
+    c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))          
+    sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+    sendEmail(tutor[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+    conn.commit()
+    conn.close()
+
+def sendEmail(email, body):
+
+    sender = 'peertutor.noreply@gmail.com'
+    msg = MIMEText(body)
+    msg["Subject"] = 'Email Subject'
+    msg["From"] = sender
+    msg["To"] = ', '.join([sender, email])
+
+    with smtplib.STMP_SSL('smtp.gmail.com', 465) as smtp_server:
+        smtp_server.login(sender, APP_PASSWORD)
+        smtp_server.sendmail(sender, [sender, email], msg.as_string())
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
