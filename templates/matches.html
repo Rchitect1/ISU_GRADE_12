@@ -9,24 +9,33 @@
     </head>
 <body style="height: 100%; overflow-y: auto;">
 
-<div class="header">
-    <nav>
-      <div class="logo">
-        <a href="/">
-            <img src="static/image/logo.png" alt="Logo" class="logo-img">
+  <div class="header">
+    
+    <div class="logo">
+        <a href="/"><img src="static/image/logo.png" alt="Logo" class="logo-img">
         </a>
         <h1>Peer Tutoring<br>Management System</h1>
     </div>
-        <ul>
-            <li><a href="/signout">Sign Out</a></li>
-        </ul>
-    </nav>
+    <nav>
+    <ul>
+        <li>
+            <i class="close-btn" onclick="toggleMenu()"><img src="static/image/close.png"></i>
+            <div class = "guidance-entry">
+           <a href="/signout">Sign Out</a>
+        </div>
+        </li>
+    </ul>
+</nav>
+
+<i class="menu-btn" onclick="toggleMenu()"><img src="static/image/menu.png" ></i>
+
 
  
 
+    <div class="content">
+      <h1 class="slide-left">Matches</h1>
 <div class="matches">
-    <h1 class="slide-left">Matches</h1>
-    <ul class="list-group" style="margin-top: 4%;">
+    <ul class="list-group">
         <li class="list-group-item list-group-item-dark">
           <div class="container text-center">
             <div class="row align-items-start">
@@ -119,6 +128,11 @@ if ((month === 5 && day >= 1 && day <= 7)) {
 } else if ((month === 3 && day >=19) || (month == 3 && day <=22)){
   document.querySelector(".logo h1").innerHTML += "💚🤍❤️"; 
 }
+
+function toggleMenu() {
+        var nav = document.querySelector('nav');
+        nav.classList.toggle('show-menu');
+    }
 </script>
     
 </body>
