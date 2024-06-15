@@ -270,15 +270,15 @@ def matchAvailable(student, tutor): #takes 2 arrays
 
                     elif (student[3][0] == tutor[3][0]): #checks first letter (subject)
                         print(6)
-                        if (int(student[3][-2]) <= int (tutor[3][-2])): #checks second last letter (grade)
+                        if (int(student[3][-2]) < int (tutor[3][-2])): #checks second last letter (grade)
                             print(7)
                             match(student, tutor)
                             
-                    elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
-                        print(8)
-                        if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
-                            print(9)
-                            match(student, tutor)
+                        elif(int(student[3][-2]) == int (tutor[3][-2])): #checks second last latter (grade)
+                            print(8)
+                            if ((student[3][-1]) <= tutor[3][-1]): #checks last letter (c/U)
+                                print(9)
+                                match(student, tutor)
                             
     conn.commit()
     conn.close()
