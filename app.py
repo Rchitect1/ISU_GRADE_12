@@ -50,7 +50,7 @@ def matches():
 
         if  hashed in new_lst and code == "220244":
             schl_id =  cur.execute("select id from schools where code = ?;", (hashed,)).fetchone()
-            res = cur.execute("select students.id, students.name, students.grade, tutors.name, tutors.grade, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
+            res = cur.execute("select students.id, students.name, students.grade, students.phone, students.email, tutors.name, tutors.grade, tutors.phone, tutors.email, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
             con.close()
             return render_template("matches.html", matches_list=res)
         else:
@@ -100,6 +100,19 @@ def remove_t(student_id): #remove tutor
     #re-match student
     for tutor in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
         matchAvailable(student, tutor) #pair up 
+
+    con.close()
+    return redirect("/matches")
+
+@app.route("/remove_b/<student_id>")
+def remove_b(student_id): #remove tutor
+    con = sqlite3.connect("records.db")
+    cur = con.cursor()
+
+    #DELETE the tutor
+    cur.execute("DELETE FROM students WHERE id = ?;", student_id)
+    cur.execute("DELETE FROM tutors WHERE match = ?;", student_id)
+    con.commit()
 
     con.close()
     return redirect("/matches")
@@ -278,8 +291,8 @@ def match(student, tutor): #STUDENT HAS TO BE FIRST
     c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))  
     conn.commit()
     conn.close()        
-    sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
-    sendEmail(tutor[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+    # sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
+    # sendEmail(tutor[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
 
 def sendEmail(email, body):
 
