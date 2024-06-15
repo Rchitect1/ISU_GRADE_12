@@ -51,7 +51,7 @@ def matches():
 
         if  hashed in new_lst and code == "220244":
             schl_id =  cur.execute("select id from schools where code = ?;", (hashed,)).fetchone()
-            res = cur.execute("select students.id, students.name, students.grade, students.phone, students.email, tutors.name, tutors.grade, tutors.phone, tutors.email, students.subject from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
+            res = cur.execute("select students.id, students.name, students.grade, students.phone, students.email, tutors.name, tutors.grade, tutors.phone, tutors.email, students.subject, students.period from students, tutors where students.id = tutors.match and students.school = ?;", schl_id).fetchall()
             con.close()
             return render_template("matches.html", matches_list=res)
         else:
