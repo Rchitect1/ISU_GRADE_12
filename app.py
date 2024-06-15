@@ -293,7 +293,7 @@ def match(student, tutor): #STUDENT HAS TO BE FIRST
     conn.commit()
     conn.close()        
     send_email(student[7], "Tutor Found", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"Your tutor is {tutor[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
-    send_email(tutor[7], "Peer Found", f"Hi {student[1]}!\n"f"Thank you for using Peer Tutoring Management System!\n" f"Your peer is {student[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
+    send_email(tutor[7], "Peer Found", f"Hi {tutor[1]}!\n"f"Thank you for using Peer Tutoring Management System!\n" f"Your peer is {student[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
 
 def send_email(to_address, subject, body):
     # Define email sender and receiver
