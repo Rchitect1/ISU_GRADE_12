@@ -34,69 +34,98 @@
 
     <div class="content">
       <h1 class="slide-left">Matches</h1>
-<div class="matches">
-    <ul class="list-group">
-        <li class="list-group-item list-group-item-dark">
-          <div class="container text-center">
-            <div class="row align-items-start">
-              <div class="col">
-                
-              </div>
-              <div class="col">
-                Remove Button
-              </div>
-              <div class="col">
-                
-              </div>
-              <div class="col">
-                Student
-              </div>
-              <div class="col">
-                Grade
-              </div>
-              <div class="col">
-                Tutor
-              </div>
-              <div class="col">
-                Grade
-              </div>
-              <div class="col">
-                Subject
-              </div>
-          </div>    
-      </li>
-        {% for match in matches_list %}
+<div class="matches" style="margin-left: 0%;">
+  {% for match in matches_list %}
+  <ul class="list-group list-group-horizontal">
+  <li class="list-group-item list-group-item-dark">Match:</li>
+  <li class="list-group-item">
+    <ul class="list-group list-group-horizontal">
         <li class="list-group-item">
             <div class="container text-center">
-              <div class="row align-items-start">
-                <div class="col">
-                  <a class="btn btn-danger" role="button" href="/remove_s/{{ match[0] }}">Remove Student</a>
-                </div>
-                <div class="col">
-                  <a class="btn btn-danger" role="button" href="/remove_t/{{ match[0] }}">Remove Tutor</a>
-                </div>
-                <div class="col">
-                  <a class="btn btn-danger" role="button" href="/remove_m/{{ match[0] }}">Remove Match</a>
-                </div>
-                <div class="col">
-                  {{match[1]}}
-                </div>
-                <div class="col">
-                  {{match[2]}}
-                </div>
-                <div class="col">
-                  {{match[3]}}
-                </div>
-                <div class="col">
-                  {{match[4]}}
-                </div>
-                <div class="col">
-                  {{match[5]}}
-                </div>
-            </div>    
+              <a class="btn btn-danger" role="button" href="/remove_s/{{ match[0] }}" style="padding: 5px 10px;">Remove<br>Student</a>
+            </div>
         </li>
-        {% endfor %}
-      </ul>
+        <li class="list-group-item">
+            <div class="container text-center">
+              <a class="btn btn-danger" role="button" href="/remove_t/{{ match[0] }}" style="padding: 5px 10px;">Remove<br>Tutor</a>
+            </div>
+        </li>
+        <li class="list-group-item list-group-item-dark">
+          <div class="container text-center">
+            Student:
+          </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[1]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[2]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[3]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[4]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[9]}}
+            </div>
+        </li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+        <li class="list-group-item">
+            <div class="container text-center">
+              <a class="btn btn-danger" role="button" href="/remove_b/{{ match[0] }}" style="padding: 5px 10px;">Remove<br>Both</a>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              <a class="btn btn-danger" role="button" href="/remove_m/{{ match[0] }}" style="padding: 5px 10px;">Remove<br>Match</a>
+            </div>
+        </li>
+        <li class="list-group-item list-group-item-dark">
+          <div class="container text-center">
+            Tutor:&nbsp&nbsp&nbsp&nbsp
+          </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[5]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[6]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[7]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              {{match[8]}}
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container text-center">
+              
+            </div>
+        </li>
+    </ul>
+  </li>
+  </ul>
+  {% endfor %}
     
 </div>
 
