@@ -5,6 +5,7 @@ import smtplib
 from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 import hashlib
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
@@ -291,22 +292,39 @@ def match(student, tutor): #STUDENT HAS TO BE FIRST
     c.execute("UPDATE tutors SET match = ? WHERE id = ?;", (student[0], tutor[0]))  
     conn.commit()
     conn.close()        
-    # sendEmail(student[7], "Thank you for using the peer tutoring management system\n you have been assinged a tutor\n tutor:" + tutor[1] + "\n subject:" + tutor[3] + "\n period:" + tutor[5])
-    # sendEmail(tutor[7], "Thank you for using the peer tutoring management system\n you have been assinged a student\n tutor:" + student[1] + "\n subject:" + student[3] + "\n period:" + student[5])
+    send_email(student[7], "Tutor Found", "Thank you for using Peer Tutoring Management System!\nYour tutor is.")
+    send_email(tutor[7], "Peer Found", "Thank you for using Peer Tutoring Management System!\nYour peer is")
 
-def sendEmail(email, body):
+def send_email(to_address, subject, body):
+    # Define email sender and receiver
+    from_address = "peertutoringmanagementsystem@gmail.com"
+    password = "pbym exmx znqc eqys"
 
-    subject = "Peer Tutor Matching"
-    sender = 'peertutor.noreply@gmail.com'
-    recepients = [sender, email]
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = sender
-    msg["To"] = ', '.join(recepients)
+    # Create the email headers and payload
+    msg = MIMEMultipart()
+    msg['From'] = from_address
+    msg['To'] = to_address
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-        smtp_server.login(sender, 'peertutor123!@#')
-        smtp_server.sendmail(sender, recepients, msg.as_string())
+    try:
+        # Connect to the Gmail SMTP server
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+
+        # Login to the email account
+        server.login(from_address, password)
+
+        # Send the email
+        server.send_message(msg)
+        print(f"Email sent to {to_address}")
+
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+    finally:
+        # Close the connection to the server
+        server.quit()
 
 
 if __name__ == "__main__":
