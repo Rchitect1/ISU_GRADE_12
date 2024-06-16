@@ -261,7 +261,7 @@ def submit_student_form():
     # Redirect to Thank You Page
     return redirect("/thank")
 
-# The function to fetch the correct data for making a match
+# The function to fetch the correct data for the making a match
 def prepareDataForMatching(data, form):
     # Open the database to read in data
     conn = sqlite3.connect("records.db")
@@ -284,7 +284,7 @@ def prepareDataForMatching(data, form):
     # If the input form is for student
     if(form == "Student"): 
         # Create the student
-        insert = [name, grade, subject, type, period, phone, email, match, int(schl_id), crossed] 
+        insert = [name, grade, subject, type, period, phone, email, match, int(schl_id), crossed] #i need to find out how to do course type, its missing from here
         c.execute("INSERT INTO students(name, grade, subject, type, period, phone, email, match, school, crossed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", insert)
         conn.commit()
         conn.close()
@@ -296,21 +296,15 @@ def prepareDataForMatching(data, form):
         st_id = c.execute("SELECT MAX(id) from students;").fetchone()[0]
         student_data = [st_id, name, int(grade), subject, type, period, phone, email, match, int(schl_id), crossed]
         row = None
-        matched = False
         # Find the available tutors
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS NULL ORDER BY id;").fetchall(): 
             # Try to match them if it is possible
-            if checkPossibilityMatching(student_data, row):
-                matched = True
-                break
-        # If no match is found, send email notification
-        if not matched:
-            send_email(email, "Standby", f"Hi {name},\n\nThank you for using the Peer Tutoring Management System.\n\nYou have not been assigned a tutor yet. Please keep an eye on your inbox for an update.\n\nGood Luck!\n\nPeer Tutoring Management System")
+            checkPossibilityMatching(student_data, row)
 
     # If the input form is for tutor   
     if(form == "Tutor"): 
         # Create the tutor
-        insert = [name, grade, subject, type, period, phone, email, match, int(schl_id), crossed] 
+        insert = [name, grade, subject, type, period, phone, email, match, int(schl_id), crossed] #i need to find out how to do course type, its missing from here
         c.execute("INSERT INTO tutors(name, grade, subject, type, period, phone, email, match, school, crossed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", insert)
         conn.commit()
         conn.close()
@@ -322,16 +316,10 @@ def prepareDataForMatching(data, form):
         tr_id = c.execute("SELECT MAX(id) from tutors;").fetchone()[0]
         tutor_data = [tr_id, name, int(grade), subject, type, period, phone, email, match, int(schl_id), crossed]
         row = None
-        matched = False
         # Find the available students
         for row in c.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM students WHERE match IS NULL ORDER BY id;").fetchall(): 
             # Try to match them if it is possible     
-            if checkPossibilityMatching(row, tutor_data):
-                matched = True
-                break
-        # If no match is found, send email notification
-        if not matched:
-            send_email(email, "Standby", f"Hi {name},\n\nThank you for using the Peer Tutoring Management System.\n\nYou have not been assigned a peer yet. Please keep an eye on your inbox for an update.\n\nGood Luck!\n\nPeer Tutoring Management System")
+            checkPossibilityMatching(row, tutor_data) 
 
     # close the database
     conn.commit()
@@ -339,6 +327,7 @@ def prepareDataForMatching(data, form):
 
 # The function to check the possibility of a match between a tutor and a student
 def checkPossibilityMatching(student, tutor):
+
     # Open the database to read in data
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
@@ -357,39 +346,25 @@ def checkPossibilityMatching(student, tutor):
                             if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
                                  # Match them
                                  matchingStudentTutor(student, tutor)
-                                 conn.commit()
-                                 conn.close()
-                                 return True
                         # Check if the tutor and the student are in the same course
                         elif (student[3][1] == tutor[3][1]):
                              # Match them
                              matchingStudentTutor(student, tutor)
-                             conn.commit()
-                             conn.close()
-                             return True
                     # Check if the tutor and the student are in the same field
                     elif (student[3][0] == tutor[3][0]): 
                         # Check if the tutor is in higher grade than the student
                         if (int(student[3][-2]) < int (tutor[3][-2])): 
                             # Match them
                             matchingStudentTutor(student, tutor)
-                            conn.commit()
-                            conn.close()
-                            return True
                         # Check if the tutor is in same grade as the student
                         elif(int(student[3][-2]) == int (tutor[3][-2])): 
-                            # Check if the tutor is in higher or equal speciality (college/university) than the student
+                            # Check if the tutor is in higer or equal speciality (college/university) than the student
                             if ((student[3][-1]) <= tutor[3][-1]): 
                                 # Match them
                                 matchingStudentTutor(student, tutor)
-                                conn.commit()
-                                conn.close()
-                                return True
-
     # close the database         
     conn.commit()
     conn.close()
-    return False
 
 # The function to make a match between a tutor and a student
 def matchingStudentTutor(student, tutor): 
@@ -403,8 +378,8 @@ def matchingStudentTutor(student, tutor):
     # close the database
     conn.close()        
     # Send proper emails to inform the student and the tutor about their match
-    send_email(student[7], "Tutor Found", f"Hi {student[1]}!\n\n" f"Thank you for using Peer Tutoring Management System!\n\n" f"Your tutor is {tutor[1]}.\n" f"The subject {tutor[1]} is going to help you with is {student[3]}.\n" f"You have been scheduled for {tutor[5]}.\n\n" f"Good Luck!\n\nPeer Tutoring Management System")
-    send_email(tutor[7], "Peer Found", f"Hi {tutor[1]}!\n\n"f"Thank you for using Peer Tutoring Management System!\n\n" f"Your peer is {student[1]}.\n" f"The subject {student[1]} needs assistance with is {student[3]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!\n\nPeer Tutoring Management System")
+    send_email(student[7], "Tutor Found", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"Your tutor is {tutor[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
+    send_email(tutor[7], "Peer Found", f"Hi {tutor[1]}!\n"f"Thank you for using Peer Tutoring Management System!\n" f"Your peer is {student[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
 
 # The function to create and send an email
 def send_email(to_address, subject, body):
