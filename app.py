@@ -362,6 +362,11 @@ def checkPossibilityMatching(student, tutor):
                             if ((student[3][-1]) <= tutor[3][-1]): 
                                 # Match them
                                 matchingStudentTutor(student, tutor)
+            else:
+                else:
+                    #Send an email to notify the user that they're on standby
+                    send_email(student[7], "Standby", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a tutor yet. Please keep on eye on your inbox in the following days for an update\n" f"Good Luck!")
+                    send_email(tutor[7], "Standby", f"Hi {tutor[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a peer yet. Please keep on eye on your inbox in the following days for an update\n" f"Good Luck!")
     # close the database         
     conn.commit()
     conn.close()
