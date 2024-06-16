@@ -332,6 +332,7 @@ def checkPossibilityMatching(student, tutor):
     conn = sqlite3.connect("records.db")
     c = conn.cursor()
 
+
     # Check if the tutor and the student were not matched before
     if not (student[1]+student[3]+student[7]+f"{student[9]}" in tutor[10]):
         if not (tutor[1]+tutor[3]+tutor[7]+f"{tutor[9]}" in student[10]):
@@ -346,26 +347,31 @@ def checkPossibilityMatching(student, tutor):
                             if ((int (student [3][-2]) <= 2 and int (tutor[3][-2]) >=2 ) or (int ((student [3][-2])) == 1 and int (tutor[3][-2]) == 1)):
                                  # Match them
                                  matchingStudentTutor(student, tutor)
+                                 
                         # Check if the tutor and the student are in the same course
                         elif (student[3][1] == tutor[3][1]):
                              # Match them
                              matchingStudentTutor(student, tutor)
+                             
                     # Check if the tutor and the student are in the same field
                     elif (student[3][0] == tutor[3][0]): 
                         # Check if the tutor is in higher grade than the student
                         if (int(student[3][-2]) < int (tutor[3][-2])): 
                             # Match them
                             matchingStudentTutor(student, tutor)
+                        
+                            
                         # Check if the tutor is in same grade as the student
                         elif(int(student[3][-2]) == int (tutor[3][-2])): 
                             # Check if the tutor is in higer or equal speciality (college/university) than the student
                             if ((student[3][-1]) <= tutor[3][-1]): 
                                 # Match them
                                 matchingStudentTutor(student, tutor)
-            else:
-                    #Send an email to notify the user that they're on standby
-                    send_email(student[7], "Standby", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a tutor yet. Please keep on eye on your inbox in the following days for an update\n" f"Good Luck!")
-                    send_email(tutor[7], "Standby", f"Hi {tutor[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a peer yet. Please keep on eye on your inbox in the following days for an update\n" f"Good Luck!")
+                                
+                    else:
+                         #Send an email to notify the user that they're on standby
+                        send_email(student[7], "Standby", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a tutor yet. Please keep on eye on your inbox in the following days for an update.\n" f"Good Luck!")
+                        send_email(tutor[7], "Standby", f"Hi {tutor[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"You have not been assigned a peer yet. Please keep on eye on your inbox in the following days for an update.\n" f"Good Luck!")
     # close the database         
     conn.commit()
     conn.close()
@@ -382,8 +388,8 @@ def matchingStudentTutor(student, tutor):
     # close the database
     conn.close()        
     # Send proper emails to inform the student and the tutor about their match
-    send_email(student[7], "Tutor Found", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"Your tutor is {tutor[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
-    send_email(tutor[7], "Peer Found", f"Hi {tutor[1]}!\n"f"Thank you for using Peer Tutoring Management System!\n" f"Your peer is {student[1]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
+    send_email(student[7], "Tutor Found", f"Hi {student[1]}!\n" f"Thank you for using Peer Tutoring Management System!\n" f"Your tutor is {tutor[1]}.\n" f"The subject {tutor[1]} is going to help you with is {student[3]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
+    send_email(tutor[7], "Peer Found", f"Hi {tutor[1]}!\n"f"Thank you for using Peer Tutoring Management System!\n" f"Your peer is {student[1]}.\n" f"The subject {student[1]} needs assistance with is {student[3]}.\n" f"You have been scheduled for {tutor[5]}.\n" f"Good Luck!")
 
 # The function to create and send an email
 def send_email(to_address, subject, body):
