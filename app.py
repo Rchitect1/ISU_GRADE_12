@@ -157,7 +157,7 @@ def remove_t(student_id):
     send_email(crossed_tutor[2], "Removed From a Match", f"Hi {crossed_tutor[0]},\n\nThank you for using the Peer Tutoring Management System.\n\nYou have been removed from the tutoring session with {student[1]}.\n\nGood Luck!\nPeer Tutoring Management System")
 
     #Notify the student that the tutor was removed 
-    send_email(student[7], "Tutor Removed From the Match", f"Hi {student[1]},\n\nThank you for using the Peer Tutoring Management System.\n\n{crossed_tutor[0]} was removed from the tutoring session.\n\nGood Luck!\nPeer Tutoring Management System")
+    send_email(student[7], "Tutor Removed From the Match", f"Hi {student[1]},\n\nThank you for using the Peer Tutoring Management System.\n\n{crossed_tutor[0]} was removed from the tutoring session. Please keep an eye on your inbox for an update.\n\nGood Luck!\nPeer Tutoring Management System")
 
     # Rematch the student if there is a possible match
     for tutor in cur.execute("SELECT id, name, grade, subject, type, period, phone, email, match, school, crossed FROM tutors WHERE match IS NULL ORDER BY id;").fetchall():
